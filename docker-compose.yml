@@ -1,0 +1,20 @@
+services:
+  backend:
+    build: ./
+    ports:
+      - 8081:8081
+    environment:
+      DB_URL: postgres://db/hairbnb
+  db:
+    image: postgres:15.4
+    ports:
+      - 5432:5432
+    volumes:
+      - hairbnb:/data/db
+    environment:
+      POSTGRES_PASSWORD: 123456
+      POSTGRES_USER: admin
+      POSTGRES_DB: hairbnb
+
+volumes:
+  hairbnb:
