@@ -1,6 +1,6 @@
 CREATE TABLE IF NOT EXISTS public.listing (
     id BIGINT PRIMARY KEY,
-    name TEXT NOT NULL,
+    title TEXT NOT NULL,
     description TEXT NOT NULL,
     address TEXT NOT NULL,
     price INT NOT NULL,
