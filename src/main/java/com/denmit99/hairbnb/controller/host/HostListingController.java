@@ -20,7 +20,7 @@ public class HostListingController {
     @PostMapping
     public String create(@Valid @RequestBody ListingCreateRequestDTO requestDTO) {
         var res = hostListingService.create(requestDTO);
-        return "Success";
+        return "Success" + res.toString();
     }
 
     @GetMapping

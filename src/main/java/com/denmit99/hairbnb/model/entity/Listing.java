@@ -1,18 +1,25 @@
 package com.denmit99.hairbnb.model.entity;
 
+import com.denmit99.hairbnb.model.Currency;
+import com.denmit99.hairbnb.model.PlaceType;
+import com.denmit99.hairbnb.model.PropertyType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import lombok.Builder;
+import lombok.Data;
 
 import java.time.ZonedDateTime;
 
 @Entity
 @Table(name = "listing")
 @Builder
+@Data
 public class Listing {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)
@@ -28,20 +35,26 @@ public class Listing {
     @Column(name = "address")
     private String address;
 
-    @Column(name = "price_per_night")
+    @Column(name = "price")
     private Integer pricePerNight;
 
+    @Column(name = "currency")
+    @Enumerated(EnumType.STRING)
+    private Currency currency;
+
     @Column(name = "property_type")
-    private String propertyType;
+    @Enumerated(EnumType.STRING)
+    private PropertyType propertyType;
 
-    @Column(name = "bed_type")
-    private String bedType;
+    @Column(name = "place_type")
+    @Enumerated(EnumType.STRING)
+    private PlaceType placeType;
 
-    @Column(name = "bed_number")
-    private Integer bedNumber;
+    @Column(name = "max_guests")
+    private Integer maxNumberOfGuests;
 
-    @Column(name = "bath_type")
-    private String bathType;
+    @Column(name = "num_of_bathrooms")
+    private Integer numberOfBathrooms;
 
     @Column(name = "creation_date")
     private ZonedDateTime creationDate;

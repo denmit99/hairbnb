@@ -1,19 +1,18 @@
-package com.denmit99.hairbnb.model.bo;
+package com.denmit99.hairbnb.model.dto;
 
 import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
-import lombok.Builder;
 
+import java.util.List;
 import java.util.Set;
 
-@Builder
-public class ListingBO {
+public class ListingDTO {
     private String title;
 
     private String description;
 
-    private String address;
+    private AddressDTO address;
 
     private Integer pricePerNight;
 
@@ -23,7 +22,7 @@ public class ListingBO {
 
     private PlaceType placeType;
 
-    private Integer maxGuests;
+    private List<BedroomDTO> bedrooms;
 
     private Integer numberOfBathrooms;
 
