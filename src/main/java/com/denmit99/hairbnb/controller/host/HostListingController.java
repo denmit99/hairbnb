@@ -1,9 +1,11 @@
 package com.denmit99.hairbnb.controller.host;
 
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
+import com.denmit99.hairbnb.model.dto.ListingDTO;
 import com.denmit99.hairbnb.service.HostListingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,10 +19,13 @@ public class HostListingController {
     @Autowired
     private HostListingService hostListingService;
 
+    @Autowired
+    private ConversionService conversionService;
+
     @PostMapping
-    public String create(@Valid @RequestBody ListingCreateRequestDTO requestDTO) {
+    public ListingDTO create(@Valid @RequestBody ListingCreateRequestDTO requestDTO) {
         var res = hostListingService.create(requestDTO);
-        return "Success" + res.toString();
+        return conversionService.convert(res, ListingDTO.class);
     }
 
     @GetMapping

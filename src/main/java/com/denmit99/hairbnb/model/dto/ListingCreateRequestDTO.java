@@ -24,7 +24,7 @@ public class ListingCreateRequestDTO {
     @Size(max = Constants.DESCRIPTION_MAX_LENGTH)
     private String description;
 
-//    @NotNull
+    @NotNull
     private AddressDTO address;
 
     @Min(1)

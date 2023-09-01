@@ -22,7 +22,7 @@ import java.time.ZonedDateTime;
 @Data
 public class Listing {
     @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 

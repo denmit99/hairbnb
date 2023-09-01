@@ -4,11 +4,15 @@ import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
 import lombok.Builder;
+import lombok.Data;
 
 import java.util.Set;
 
 @Builder
+@Data
 public class ListingBO {
+    private Long id;
+
     private String title;
 
     private String description;
