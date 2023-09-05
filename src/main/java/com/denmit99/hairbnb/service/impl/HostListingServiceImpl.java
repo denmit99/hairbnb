@@ -1,5 +1,6 @@
 package com.denmit99.hairbnb.service.impl;
 
+import com.denmit99.hairbnb.exception.NotFoundException;
 import com.denmit99.hairbnb.model.bo.ListingBO;
 import com.denmit99.hairbnb.model.dto.AddressDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
@@ -53,6 +54,15 @@ public class HostListingServiceImpl implements HostListingService {
         bedArrangementService.save(res.getId(), requestDTO.getBedrooms());
         listingAmenityService.save(res.getId(), requestDTO.getAmenities());
         return conversionService.convert(res, ListingBO.class);
+    }
+
+    @Override
+    public ListingBO get(Long listingId) {
+        var res = listingRepository.findById(listingId);
+        if (res.isEmpty()) {
+            throw new NotFoundException(String.format("Listing with id %s is not found", listingId));
+        }
+        return conversionService.convert(res.get(), ListingBO.class);
     }
 
     private String convertAddressToString(AddressDTO addressDTO) {

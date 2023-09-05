@@ -5,4 +5,6 @@ import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 
 public interface HostListingService {
     ListingBO create(ListingCreateRequestDTO requestDTO);
+
+    ListingBO get(Long listingId);
 }

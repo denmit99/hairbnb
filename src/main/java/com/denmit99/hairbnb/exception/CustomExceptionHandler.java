@@ -15,6 +15,12 @@ public class CustomExceptionHandler {
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 
+    @ExceptionHandler(value = {NotFoundException.class})
+    public ResponseEntity<Object> notFoundException(NotFoundException ex) {
+        ErrorMessage error = new ErrorMessage("not.found", ex.getMessage());
+        return new ResponseEntity<>(error, HttpStatus.NOT_FOUND);
+    }
+
     @ExceptionHandler(value = {RuntimeException.class})
     public ResponseEntity<Object> defaultException(RuntimeException ex) {
         ErrorMessage error = new ErrorMessage("internal.error", ex.getMessage());
