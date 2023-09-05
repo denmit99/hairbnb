@@ -31,6 +31,7 @@ public class ListingDTO {
 
     private PlaceType placeType;
 
+    //TODO it's null right now in response
     private List<BedroomDTO> bedrooms;
 
     private Integer numberOfBathrooms;

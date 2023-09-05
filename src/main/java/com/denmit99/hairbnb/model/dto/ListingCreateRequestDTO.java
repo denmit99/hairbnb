@@ -4,6 +4,7 @@ import com.denmit99.hairbnb.constants.Constants;
 import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
+import com.denmit99.hairbnb.validation.AmenityCodesExist;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotBlank;
@@ -50,12 +51,9 @@ public class ListingCreateRequestDTO {
     @NotNull
     private Integer numberOfBathrooms;
 
+    //TODO check that all are valid
+    @AmenityCodesExist
     private Set<String> amenities;
-
-
-
-
-
 
 //    //SUITABLE FOR
 //    //DETAILS

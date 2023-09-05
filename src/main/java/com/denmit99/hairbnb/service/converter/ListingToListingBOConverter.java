@@ -2,13 +2,17 @@ package com.denmit99.hairbnb.service.converter;
 
 import com.denmit99.hairbnb.model.bo.ListingBO;
 import com.denmit99.hairbnb.model.entity.Listing;
+import com.denmit99.hairbnb.service.ListingAmenityService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
-import java.util.Set;
-
 @Component
 public class ListingToListingBOConverter implements Converter<Listing, ListingBO> {
+
+    @Autowired
+    private ListingAmenityService listingAmenityService;
+
     @Override
     public ListingBO convert(Listing source) {
         return ListingBO.builder()
@@ -22,8 +26,7 @@ public class ListingToListingBOConverter implements Converter<Listing, ListingBO
                 .placeType(source.getPlaceType())
                 .maxGuests(source.getMaxNumberOfGuests())
                 .numberOfBathrooms(source.getNumberOfBathrooms())
-                //TODO
-                .amenities(Set.of())
+                .amenities(listingAmenityService.getByListing(source.getId()))
                 .build();
     }
 }
