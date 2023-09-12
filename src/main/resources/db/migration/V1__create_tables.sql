@@ -63,12 +63,12 @@ INSERT INTO public.amenity(category_id, code) VALUES
 
 CREATE INDEX IF NOT EXISTS amenity_code_index ON public.amenity(code);
 
---CREATE TABLE IF NOT EXISTS users (
---    id SERIAL PRIMARY KEY
---    first_name TEXT NOT NULL,
---    last_name TEXT NOT NULL,
---    email TEXT NOT NULL,
---    password TEXT NOT NULL,
---    creation_date timestamptz NOT NULL,
---    last_login_date timestamptz NOT NULL
---);
+CREATE TABLE IF NOT EXISTS user_info (
+    id SERIAL PRIMARY KEY
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+    email TEXT NOT NULL,
+    password TEXT NOT NULL,
+    creation_date timestamptz NOT NULL,
+    last_login_date timestamptz NOT NULL
+);

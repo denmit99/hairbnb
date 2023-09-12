@@ -7,3 +7,8 @@ spring:
     username: "admin"
     password: "123456"
 #    driver-class-name:
+
+app:
+  jwt:
+    secret: "61DC8E91921C25314AE714486E5EA"
+    ttl: 1d
