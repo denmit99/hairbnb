@@ -1,5 +1,7 @@
 package com.denmit99.hairbnb.controller.login;
 
+import com.denmit99.hairbnb.model.bo.auth.LoginResponseBO;
+import com.denmit99.hairbnb.model.bo.auth.RegisterResponseBO;
 import com.denmit99.hairbnb.model.dto.auth.AuthenticationResponseDTO;
 import com.denmit99.hairbnb.model.dto.auth.LoginRequestDTO;
 import com.denmit99.hairbnb.model.dto.auth.RefreshTokenRequestDTO;
@@ -25,7 +27,8 @@ public class AuthenticationController {
 
     @PostMapping("/login")
     public AuthenticationResponseDTO login(@Valid @RequestBody LoginRequestDTO requestDTO) {
-        return null;
+        LoginResponseBO loginResponseBO = authenticationService.login(requestDTO);
+        return conversionService.convert(loginResponseBO, AuthenticationResponseDTO.class);
     }
 
     @PostMapping("/logout")
@@ -35,7 +38,7 @@ public class AuthenticationController {
 
     @PostMapping("/register")
     public AuthenticationResponseDTO register(@Valid @RequestBody RegisterRequestDTO requestDTO) {
-        var authResponseBO = authenticationService.register(requestDTO);
+        RegisterResponseBO authResponseBO = authenticationService.register(requestDTO);
         return conversionService.convert(authResponseBO, AuthenticationResponseDTO.class);
     }
 

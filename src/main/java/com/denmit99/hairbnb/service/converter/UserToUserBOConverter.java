@@ -10,6 +10,7 @@ public class UserToUserBOConverter implements Converter<User, UserBO> {
     @Override
     public UserBO convert(User user) {
         return UserBO.builder()
+                .id(user.getId())
                 .email(user.getEmail())
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
