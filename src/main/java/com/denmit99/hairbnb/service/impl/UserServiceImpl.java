@@ -27,12 +27,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserBO create(UserCreateRequestBO createRequestBO) {
+        var now = ZonedDateTime.now();
         User user = User.builder()
                 .firstName(createRequestBO.getFirstName())
                 .lastName(createRequestBO.getLastName())
                 .email(createRequestBO.getEmail())
                 .password(createRequestBO.getPasswordEncoded())
-                .creationDate(ZonedDateTime.now())
+                .creationDate(now)
+                .lastLoginDate(now)
                 .build();
         User savedUser = repository.save(user);
         return conversionService.convert(savedUser, UserBO.class);

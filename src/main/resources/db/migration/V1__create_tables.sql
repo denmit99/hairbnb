@@ -67,8 +67,16 @@ CREATE TABLE IF NOT EXISTS user_info (
     id SERIAL PRIMARY KEY,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
-    email TEXT NOT NULL,
+    email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
     creation_date timestamptz NOT NULL,
     last_login_date timestamptz NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS token (
+    id SERIAL PRIMARY KEY,
+    user_id BIGINT REFERENCES user_info(id),
+    token TEXT NOT NULL,
+    expired BOOLEAN NOT NULL DEFAULT FALSE,
+    revoked BOOLEAN NOT NULL DEFAULT FALSE
 );

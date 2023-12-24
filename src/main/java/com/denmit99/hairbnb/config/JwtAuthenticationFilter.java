@@ -9,6 +9,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
+import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
@@ -27,26 +29,35 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private ConversionService conversionService;
+
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+    protected void doFilterInternal(HttpServletRequest request,
+                                    @NonNull HttpServletResponse response,
+                                    @NonNull FilterChain chain)
             throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
+            chain.doFilter(request, response);
             return;
             //TODO error
         }
         String token = authHeader.substring(BEARER_PREFIX.length());
         var email = jwtService.extractEmail(token);
-        if (email != null & SecurityContextHolder.getContext().getAuthentication() == null) {
+        if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userBO = userService.findByEmail(email);
-            var userToken = new UserToken(userBO.getEmail(), userBO.getFirstName(), userBO.getLastName(), "");
-            if (jwtService.verify(token)) {
+            if (userBO == null) {
+                //TODO throw exception
+            }
+            var userToken = conversionService.convert(userBO, UserToken.class);
+            if (jwtService.isValid(token)) {
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         userToken, null, userToken.getAuthorities()
                 );
                 SecurityContextHolder.getContext().setAuthentication(auth);
             }
         }
-        filterChain.doFilter(request, response);
+        chain.doFilter(request, response);
     }
 }

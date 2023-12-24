@@ -25,8 +25,11 @@ public class JwtServiceImpl implements JwtService {
     @Value("${app.jwt.secret}")
     private String secretKey;
 
-    @Value("${app.jwt.ttl}")
+    @Value("${app.jwt.expiration}")
     private Duration expiration;
+
+    @Value("${app.jwt.refresh-expiration}")
+    private Duration refreshExpiration;
 
     @Autowired
     private ConversionService conversionService;
@@ -37,7 +40,7 @@ public class JwtServiceImpl implements JwtService {
     }
 
     @Override
-    public boolean verify(String jwtToken) {
+    public boolean isValid(String jwtToken) {
         if (isExpired(jwtToken)) {
             return false;
         }
@@ -46,19 +49,23 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generate(UserToken token) {
+        return buildToken(token, expiration.toMillis());
+    }
+
+    @Override
+    public String generateRefreshToken(UserToken token) {
+        return buildToken(token, refreshExpiration.toMillis());
+    }
+
+    private String buildToken(UserToken token, long expiration) {
         var now = System.currentTimeMillis();
         return Jwts.builder()
                 .setClaims(getClaims(token))
                 .setSubject(token.getUsername())
                 .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + expiration.toMillis()))
+                .setExpiration(new Date(now + expiration))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
-    }
-
-    @Override
-    public String generateRefreshToken(UserToken token) {
-        return null;
     }
 
     private Map<String, Object> getClaims(UserToken token) {

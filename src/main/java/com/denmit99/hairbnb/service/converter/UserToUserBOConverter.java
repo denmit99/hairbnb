@@ -8,11 +8,12 @@ import org.springframework.stereotype.Component;
 @Component
 public class UserToUserBOConverter implements Converter<User, UserBO> {
     @Override
-    public UserBO convert(User source) {
+    public UserBO convert(User user) {
         return UserBO.builder()
-                .email(source.getEmail())
-                .firstName(source.getFirstName())
-                .lastName(source.getLastName())
+                .email(user.getEmail())
+                .firstName(user.getFirstName())
+                .lastName(user.getLastName())
+                .password(user.getPassword())
                 .build();
     }
 }

@@ -34,7 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .email(requestDTO.getEmail())
                 .firstName(requestDTO.getFirstName())
                 .lastName(requestDTO.getLastName())
-                .passwordEncoded(requestDTO.getPassword())
+                .passwordEncoded(passwordEncoder.encode(requestDTO.getPassword()))
                 .build();
         UserBO userBO = userService.create(createRequest);
         UserToken userToken = conversionService.convert(userBO, UserToken.class);
@@ -44,5 +44,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .token(token)
                 .refreshToken(refreshToken)
                 .build();
+    }
+
+    @Override
+    public void refreshToken() {
+        //TODO
     }
 }
