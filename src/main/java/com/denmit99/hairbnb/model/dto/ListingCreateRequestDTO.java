@@ -55,17 +55,4 @@ public class ListingCreateRequestDTO {
     @AmenityCodesExist
     private Set<String> amenities;
 
-//    //SUITABLE FOR
-//    //DETAILS
-//
-//    //TODO from to at least 2 hours difference
-//    private Integer checkInFrom;
-//    private Integer checkInTo;
-//    private Integer allowToBookBefore;
-//    private Integer maxBookingInAdvanceMonths;
-//
-//    //TODO validate
-//    private Integer minDurationDays;
-//    private Integer maxDurationDays;
-
 }

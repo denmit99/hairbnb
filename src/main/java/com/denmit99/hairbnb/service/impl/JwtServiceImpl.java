@@ -1,13 +1,16 @@
 package com.denmit99.hairbnb.service.impl;
 
 import com.denmit99.hairbnb.model.UserToken;
+import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
@@ -24,6 +27,9 @@ public class JwtServiceImpl implements JwtService {
 
     @Value("${app.jwt.ttl}")
     private Duration expiration;
+
+    @Autowired
+    private ConversionService conversionService;
 
     @Override
     public String extractEmail(String token) {
@@ -48,6 +54,11 @@ public class JwtServiceImpl implements JwtService {
                 .setExpiration(new Date(now + expiration.toMillis()))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
+    }
+
+    @Override
+    public String generateRefreshToken(UserToken token) {
+        return null;
     }
 
     private Map<String, Object> getClaims(UserToken token) {

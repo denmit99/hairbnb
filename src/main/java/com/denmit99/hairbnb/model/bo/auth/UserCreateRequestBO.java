@@ -1,16 +1,16 @@
-package com.denmit99.hairbnb.model.bo;
+package com.denmit99.hairbnb.model.bo.auth;
 
 import lombok.Builder;
 import lombok.Data;
 
 @Data
 @Builder
-public class UserBO {
+public class UserCreateRequestBO {
     private String email;
 
     private String firstName;
 
     private String lastName;
 
-    private String password;
+    private String passwordEncoded;
 }

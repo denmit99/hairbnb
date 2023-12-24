@@ -18,7 +18,9 @@ public class SecurityConfiguration {
                         .requestMatchers("/admin/**")
                         .hasRole("ADMIN")
                         .requestMatchers("/host/**")
-                        .hasRole("HOST"));
+                        .hasRole("HOST")
+                        .requestMatchers("/auth/**")
+                        .permitAll());
         return http.build();
     }
 }
