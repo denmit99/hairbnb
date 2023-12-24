@@ -2,9 +2,10 @@ package com.denmit99.hairbnb.service;
 
 import com.denmit99.hairbnb.model.UserToken;
 
+/**
+ * Know nothing about user, only about token
+ */
 public interface JwtService {
-
-    UserToken extractUser(String jwtToken);
 
     String extractEmail(String jwtToken);
 

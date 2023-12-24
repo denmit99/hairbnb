@@ -26,17 +26,6 @@ public class JwtServiceImpl implements JwtService {
     private Duration expiration;
 
     @Override
-    public UserToken extractUser(String jwtToken) {
-        var email = extractEmail(jwtToken);
-        //TODO find by email
-        return UserToken.builder()
-                .email(email)
-                .firstName()
-                .lastName()
-                .build();
-    }
-
-    @Override
     public String extractEmail(String token) {
         return extractClaim(token, Claims::getSubject);
     }

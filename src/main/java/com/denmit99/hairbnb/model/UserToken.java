@@ -1,5 +1,6 @@
 package com.denmit99.hairbnb.model;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -11,6 +12,7 @@ import java.util.List;
 
 @Builder
 @Data
+@AllArgsConstructor
 public class UserToken implements UserDetails {
 
     private String email;
