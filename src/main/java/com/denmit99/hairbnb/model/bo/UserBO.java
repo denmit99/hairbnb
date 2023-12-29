@@ -1,5 +1,6 @@
 package com.denmit99.hairbnb.model.bo;
 
+import com.denmit99.hairbnb.model.UserRole;
 import lombok.Builder;
 import lombok.Data;
 
@@ -15,4 +16,6 @@ public class UserBO {
     private String lastName;
 
     private String password;
+
+    private UserRole role;
 }

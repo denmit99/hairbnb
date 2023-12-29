@@ -33,6 +33,7 @@ public class UserServiceImpl implements UserService {
                 .lastName(createRequestBO.getLastName())
                 .email(createRequestBO.getEmail())
                 .password(createRequestBO.getPasswordEncoded())
+                .role(createRequestBO.getRole())
                 .creationDate(now)
                 .lastLoginDate(now)
                 .build();

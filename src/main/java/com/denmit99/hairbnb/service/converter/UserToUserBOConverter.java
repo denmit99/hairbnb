@@ -15,6 +15,7 @@ public class UserToUserBOConverter implements Converter<User, UserBO> {
                 .firstName(user.getFirstName())
                 .lastName(user.getLastName())
                 .password(user.getPassword())
+                .role(user.getRole())
                 .build();
     }
 }

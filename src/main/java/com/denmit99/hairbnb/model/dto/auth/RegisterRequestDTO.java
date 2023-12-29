@@ -1,7 +1,9 @@
 package com.denmit99.hairbnb.model.dto.auth;
 
+import com.denmit99.hairbnb.model.UserRole;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -22,4 +24,7 @@ public class RegisterRequestDTO {
 
     @NotBlank
     private String password;
+
+    @NotNull
+    private UserRole role;
 }

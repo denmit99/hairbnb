@@ -14,6 +14,7 @@ public class UserBOToUserTokenConverter implements Converter<UserBO, UserToken> 
                 .firstName(userBO.getFirstName())
                 .lastName(userBO.getLastName())
                 .password(userBO.getPassword())
+                .role(userBO.getRole())
                 .build();
     }
 }

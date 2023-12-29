@@ -1,5 +1,6 @@
 package com.denmit99.hairbnb.model.bo.auth;
 
+import com.denmit99.hairbnb.model.UserRole;
 import lombok.Builder;
 import lombok.Data;
 
@@ -13,4 +14,6 @@ public class UserCreateRequestBO {
     private String lastName;
 
     private String passwordEncoded;
+
+    private UserRole role;
 }

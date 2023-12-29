@@ -23,9 +23,11 @@ public class UserToken implements UserDetails {
 
     private String password;
 
+    private UserRole role;
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return List.of(new SimpleGrantedAuthority("USER"));
+        return List.of(new SimpleGrantedAuthority("ROLE_" + role.toString()));
     }
 
     @Override

@@ -42,6 +42,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .email(requestDTO.getEmail())
                 .firstName(requestDTO.getFirstName())
                 .lastName(requestDTO.getLastName())
+                .role(requestDTO.getRole())
                 .passwordEncoded(passwordEncoder.encode(requestDTO.getPassword()))
                 .build();
         UserBO userBO = userService.create(createRequest);

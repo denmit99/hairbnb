@@ -69,6 +69,7 @@ CREATE TABLE IF NOT EXISTS user_info (
     last_name TEXT NOT NULL,
     email TEXT NOT NULL UNIQUE,
     password TEXT NOT NULL,
+    role TEXT NOT NULL,
     creation_date timestamptz NOT NULL,
     last_login_date timestamptz NOT NULL
 );

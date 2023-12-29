@@ -29,12 +29,12 @@ public class SecurityConfiguration {
                 .authorizeHttpRequests(a ->
                         a.requestMatchers("/auth/**")
                                 .permitAll()
-                                .requestMatchers("/**")
-                                .hasRole("USER")
-                                .requestMatchers("/admin/**")
-                                .hasRole("ADMIN")
-                                .requestMatchers("/host/**")
-                                .hasRole("HOST")
+//                                .requestMatchers("/**")
+//                                .hasRole("USER")
+//                                .requestMatchers("/admin/**")
+//                                .hasRole("ADMIN")
+//                                .requestMatchers("/host/**")
+//                                .hasRole("HOST")
                                 .anyRequest().authenticated()
 
                 )
