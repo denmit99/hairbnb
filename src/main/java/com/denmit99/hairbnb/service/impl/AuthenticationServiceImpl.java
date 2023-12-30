@@ -12,7 +12,7 @@ import com.denmit99.hairbnb.model.dto.auth.RegisterRequestDTO;
 import com.denmit99.hairbnb.service.AuthenticationService;
 import com.denmit99.hairbnb.service.CustomPasswordEncoder;
 import com.denmit99.hairbnb.service.JwtService;
-import com.denmit99.hairbnb.service.TokenService;
+import com.denmit99.hairbnb.service.TokenInfoService;
 import com.denmit99.hairbnb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -34,7 +34,7 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     private ConversionService conversionService;
 
     @Autowired
-    private TokenService tokenService;
+    private TokenInfoService tokenService;
 
     @Override
     public RegisterResponseBO register(RegisterRequestDTO requestDTO) {

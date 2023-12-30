@@ -11,4 +11,6 @@ public interface ListingAmenityRepository extends JpaRepository<ListingAmenity, 
             "ON la.amenityId = a.id " +
             "WHERE la.listingId = :listingId")
     Set<String> findAllByListingId(Long listingId);
+
+    void deleteByListingId(Long listingId);
 }

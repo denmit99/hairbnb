@@ -1,15 +1,19 @@
 package com.denmit99.hairbnb.service.impl;
 
+import com.denmit99.hairbnb.model.UserToken;
 import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.bo.auth.UserCreateRequestBO;
 import com.denmit99.hairbnb.model.entity.User;
 import com.denmit99.hairbnb.repository.UserRepository;
+import com.denmit99.hairbnb.service.AuthenticationService;
 import com.denmit99.hairbnb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -22,7 +26,10 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserBO findByEmail(String email) {
-        return conversionService.convert(repository.findByEmail(email), UserBO.class);
+        var userEntity = repository.findByEmail(email);
+        return Optional.ofNullable(userEntity)
+                .map(u -> conversionService.convert(u, UserBO.class))
+                .orElse(null);
     }
 
     @Override
@@ -39,5 +46,11 @@ public class UserServiceImpl implements UserService {
                 .build();
         User savedUser = repository.save(user);
         return conversionService.convert(savedUser, UserBO.class);
+    }
+
+    @Override
+    public UserBO getCurrent() {
+        var currentUserToken = (UserToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        return conversionService.convert(repository.findByEmail(currentUserToken.getEmail()), UserBO.class);
     }
 }

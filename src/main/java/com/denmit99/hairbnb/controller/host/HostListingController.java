@@ -6,6 +6,7 @@ import com.denmit99.hairbnb.service.HostListingService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -27,6 +28,11 @@ public class HostListingController {
     public ListingDTO create(@Valid @RequestBody ListingCreateRequestDTO requestDTO) {
         var res = hostListingService.create(requestDTO);
         return conversionService.convert(res, ListingDTO.class);
+    }
+
+    @DeleteMapping("/{id}")
+    public void delete(@PathVariable("id") Long listingId) {
+        hostListingService.delete(listingId);
     }
 
     @GetMapping

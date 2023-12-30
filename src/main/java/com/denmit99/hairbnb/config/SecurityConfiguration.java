@@ -1,11 +1,9 @@
 package com.denmit99.hairbnb.config;
 
+import com.denmit99.hairbnb.service.UserTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.AuthenticationProvider;
-import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -23,28 +21,32 @@ public class SecurityConfiguration {
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
+    @Autowired
+    private UserTokenService userTokenService;
+
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.csrf(AbstractHttpConfigurer::disable)
+        http
+                .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(a ->
-                        a.requestMatchers("/auth/**")
-                                .permitAll()
-//                                .requestMatchers("/**")
-//                                .hasRole("USER")
-//                                .requestMatchers("/admin/**")
-//                                .hasRole("ADMIN")
-//                                .requestMatchers("/host/**")
-//                                .hasRole("HOST")
-                                .anyRequest().authenticated()
+                                a.requestMatchers("/auth/**")
+                                        .permitAll()
+                                        .requestMatchers("/admin/**")
+                                        .hasRole("ADMIN")
+                                        .requestMatchers("/host/**")
+                                        .hasRole("HOST")
+                                        .requestMatchers("/**")
+                                        .hasRole("USER")
+                                        .anyRequest().authenticated()
 
                 )
-//                .authenticationProvider(authenticationProvider)
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
         return http.build();
     }
 
     @Bean
-    PasswordEncoder getEncoder() {
+    PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
+
 }

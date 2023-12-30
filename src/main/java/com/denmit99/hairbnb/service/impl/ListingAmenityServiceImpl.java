@@ -33,6 +33,11 @@ public class ListingAmenityServiceImpl implements ListingAmenityService {
     }
 
     @Override
+    public void deleteByListingId(Long listingId) {
+        repository.deleteByListingId(listingId);
+    }
+
+    @Override
     public Set<String> getByListing(Long listingId) {
         return repository.findAllByListingId(listingId);
     }

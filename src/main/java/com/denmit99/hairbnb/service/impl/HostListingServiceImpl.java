@@ -2,6 +2,7 @@ package com.denmit99.hairbnb.service.impl;
 
 import com.denmit99.hairbnb.exception.NotFoundException;
 import com.denmit99.hairbnb.model.bo.ListingBO;
+import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.dto.AddressDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.entity.Listing;
@@ -9,9 +10,11 @@ import com.denmit99.hairbnb.repository.ListingRepository;
 import com.denmit99.hairbnb.service.BedArrangementService;
 import com.denmit99.hairbnb.service.HostListingService;
 import com.denmit99.hairbnb.service.ListingAmenityService;
+import com.denmit99.hairbnb.service.UserService;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,13 +35,18 @@ public class HostListingServiceImpl implements HostListingService {
     private ListingAmenityService listingAmenityService;
 
     @Autowired
+    private UserService userService;
+
+    @Autowired
     private ConversionService conversionService;
 
     @Transactional
     @Override
     public ListingBO create(ListingCreateRequestDTO requestDTO) {
+        var user = userService.getCurrent();
         var listing = Listing.builder()
                 .title(requestDTO.getTitle())
+                .userId(user.getId())
                 .description(requestDTO.getDescription())
                 .address(convertAddressToString(requestDTO.getAddress()))
                 .pricePerNight(requestDTO.getPricePerNight())
@@ -54,6 +62,22 @@ public class HostListingServiceImpl implements HostListingService {
         bedArrangementService.save(res.getId(), requestDTO.getBedrooms());
         listingAmenityService.save(res.getId(), requestDTO.getAmenities());
         return conversionService.convert(res, ListingBO.class);
+    }
+
+    @Override
+    @Transactional
+    public void delete(Long listingId) {
+        UserBO currentUser = userService.getCurrent();
+        var listing = listingRepository.findById(listingId);
+        if (listing.isEmpty()) {
+            throw new NotFoundException(String.format("Listing with id %s is not found", listingId));
+        }
+        if (!Objects.equals(currentUser.getId(), listing.get().getUserId())) {
+            throw new AccessDeniedException("Wrong user");
+        }
+        bedArrangementService.deleteByListingId(listingId);
+        listingAmenityService.deleteByListingId(listingId);
+        listingRepository.deleteById(listingId);
     }
 
     @Override

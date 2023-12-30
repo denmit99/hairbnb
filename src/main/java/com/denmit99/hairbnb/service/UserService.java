@@ -7,4 +7,6 @@ public interface UserService {
     UserBO findByEmail(String email);
 
     UserBO create(UserCreateRequestBO createRequestBO);
+
+    UserBO getCurrent();
 }

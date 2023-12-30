@@ -8,5 +8,7 @@ import java.util.Set;
 public interface ListingAmenityService {
     List<ListingAmenity> save(Long listingId, Set<String> amenities);
 
+    void deleteByListingId(Long listingId);
+
     Set<String> getByListing(Long listingId);
 }

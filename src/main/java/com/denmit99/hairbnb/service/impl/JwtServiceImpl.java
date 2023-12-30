@@ -1,7 +1,6 @@
 package com.denmit99.hairbnb.service.impl;
 
 import com.denmit99.hairbnb.model.UserToken;
-import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.service.JwtService;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;

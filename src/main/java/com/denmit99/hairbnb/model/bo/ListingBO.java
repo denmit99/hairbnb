@@ -13,6 +13,8 @@ import java.util.Set;
 public class ListingBO {
     private Long id;
 
+    private Long userId;
+
     private String title;
 
     private String description;

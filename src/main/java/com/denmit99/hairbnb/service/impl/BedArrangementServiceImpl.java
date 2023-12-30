@@ -29,4 +29,9 @@ public class BedArrangementServiceImpl implements BedArrangementService {
             }
         }
     }
+
+    @Override
+    public void deleteByListingId(Long listingId) {
+        bedArrangementRepository.deleteByListingId(listingId);
+    }
 }

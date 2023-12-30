@@ -2,7 +2,9 @@ package com.denmit99.hairbnb.config;
 
 import com.denmit99.hairbnb.model.UserToken;
 import com.denmit99.hairbnb.service.JwtService;
+import com.denmit99.hairbnb.service.TokenInfoService;
 import com.denmit99.hairbnb.service.UserService;
+import com.denmit99.hairbnb.service.UserTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -11,7 +13,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.lang.NonNull;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -27,7 +31,13 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private JwtService jwtService;
 
     @Autowired
+    private UserTokenService userTokenService;
+
+    @Autowired
     private UserService userService;
+
+    @Autowired
+    private TokenInfoService tokenInfoService;
 
     @Autowired
     private ConversionService conversionService;
@@ -41,21 +51,23 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
             chain.doFilter(request, response);
             return;
-            //TODO error
         }
-        String token = authHeader.substring(BEARER_PREFIX.length());
-        var email = jwtService.extractEmail(token);
+        String tokenString = authHeader.substring(BEARER_PREFIX.length());
+        var email = jwtService.extractEmail(tokenString);
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userBO = userService.findByEmail(email);
             if (userBO == null) {
-                //TODO throw exception
+                throw new AccessDeniedException("");
             }
+            var token = tokenInfoService.findByJWT(tokenString);
             var userToken = conversionService.convert(userBO, UserToken.class);
-            if (jwtService.isValid(token)) {
+            if (jwtService.isValid(tokenString) && !token.isRevoked() && !token.isExpired()) {
+                SecurityContext context = SecurityContextHolder.createEmptyContext();
                 UsernamePasswordAuthenticationToken auth = new UsernamePasswordAuthenticationToken(
                         userToken, null, userToken.getAuthorities()
                 );
-                SecurityContextHolder.getContext().setAuthentication(auth);
+                context.setAuthentication(auth);
+                SecurityContextHolder.setContext(context);
             }
         }
         chain.doFilter(request, response);

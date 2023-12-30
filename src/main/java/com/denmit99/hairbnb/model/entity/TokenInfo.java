@@ -17,7 +17,7 @@ import lombok.NoArgsConstructor;
 @Table(name = "token")
 @NoArgsConstructor
 @AllArgsConstructor
-public class Token {
+public class TokenInfo {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")

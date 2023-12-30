@@ -17,6 +17,7 @@ public class ListingToListingBOConverter implements Converter<Listing, ListingBO
     public ListingBO convert(Listing source) {
         return ListingBO.builder()
                 .id(source.getId())
+                .userId(source.getUserId())
                 .title(source.getTitle())
                 .description(source.getDescription())
                 .address(source.getAddress())

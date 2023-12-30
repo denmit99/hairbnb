@@ -6,5 +6,7 @@ import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 public interface HostListingService {
     ListingBO create(ListingCreateRequestDTO requestDTO);
 
+    void delete(Long listingId);
+
     ListingBO get(Long listingId);
 }
