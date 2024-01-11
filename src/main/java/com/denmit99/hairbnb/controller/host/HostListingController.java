@@ -3,6 +3,7 @@ package com.denmit99.hairbnb.controller.host;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.dto.ListingDTO;
 import com.denmit99.hairbnb.service.HostListingService;
+import com.denmit99.hairbnb.validation.ListingIdExists;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -31,7 +32,7 @@ public class HostListingController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") Long listingId) {
+    public void delete(@PathVariable("id") @ListingIdExists Long listingId) {
         hostListingService.delete(listingId);
     }
 
@@ -41,7 +42,7 @@ public class HostListingController {
     }
 
     @GetMapping("/{id}")
-    public ListingDTO get(@PathVariable("id") Long listingId) {
+    public ListingDTO get(@PathVariable("id") @ListingIdExists Long listingId) {
         return conversionService.convert(hostListingService.get(listingId), ListingDTO.class);
     }
 

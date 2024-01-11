@@ -14,12 +14,13 @@ import lombok.NoArgsConstructor;
 public class RegisterRequestDTO {
 
     @Email
+    @NotBlank
     private String email;
 
-    @NotBlank
+    //TODO Do we need it?
     private String firstName;
 
-    @NotBlank
+    //TODO do we need it?
     private String lastName;
 
     @NotBlank
