@@ -68,10 +68,13 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Map<String, Object> getClaims(UserToken token) {
-        return Map.of(
-                "firstName", token.getFirstName(),
-                "lastName", token.getLastName()
-        );
+        if (token.getFirstName() != null && token.getLastName() != null) {
+            return Map.of(
+                    "firstName", token.getFirstName(),
+                    "lastName", token.getLastName()
+            );
+        }
+        return Map.of();
     }
 
     private boolean isExpired(String token) {
