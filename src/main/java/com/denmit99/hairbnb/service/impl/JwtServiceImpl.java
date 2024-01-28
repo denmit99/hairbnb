@@ -71,10 +71,11 @@ public class JwtServiceImpl implements JwtService {
         if (token.getFirstName() != null && token.getLastName() != null) {
             return Map.of(
                     "firstName", token.getFirstName(),
-                    "lastName", token.getLastName()
+                    "lastName", token.getLastName(),
+                    "role", token.getRole()
             );
         }
-        return Map.of();
+        return Map.of("role", token.getRole());
     }
 
     private boolean isExpired(String token) {

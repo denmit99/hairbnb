@@ -17,10 +17,10 @@ public class RegisterRequestDTO {
     @NotBlank
     private String email;
 
-    //TODO Do we need it?
+    @NotBlank
     private String firstName;
 
-    //TODO do we need it?
+    @NotBlank
     private String lastName;
 
     @NotBlank

@@ -5,6 +5,4 @@ public enum PropertyType {
     HOUSE,
     SECONDARY_UNIT,
     UNIQUE_SPACE,
-    BOUTIQUE_HOTEL,
-    BED_AND_BREAKFAST
 }
