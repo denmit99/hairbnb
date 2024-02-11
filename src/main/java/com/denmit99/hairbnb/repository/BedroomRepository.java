@@ -1,8 +1,8 @@
 package com.denmit99.hairbnb.repository;
 
-import com.denmit99.hairbnb.model.entity.BedArrangement;
+import com.denmit99.hairbnb.model.entity.Bedroom;
 import org.springframework.data.jpa.repository.JpaRepository;
 
-public interface BedArrangementRepository extends JpaRepository<BedArrangement, Long> {
+public interface BedroomRepository extends JpaRepository<Bedroom, Long> {
     void deleteByListingId(Long listingId);
 }

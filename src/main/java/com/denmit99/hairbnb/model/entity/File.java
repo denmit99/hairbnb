@@ -1,41 +1,44 @@
 package com.denmit99.hairbnb.model.entity;
 
-import com.denmit99.hairbnb.model.BedType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.time.ZonedDateTime;
+
 @Entity
-@Table(name = "bed_arrangement")
+@Table(name = "file")
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class BedArrangement {
+public class File {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "listing_id")
-    private Long listingId;
+    @Lob
+    @Column(name = "data")
+    private byte[] data;
 
-    @Column(name = "room_number")
-    private Integer roomNumber;
+    @Column(name = "name")
+    private String name;
 
-    @Column(name = "bed_type")
-    @Enumerated(EnumType.STRING)
-    private BedType bedType;
+    @Column(name = "type")
+    private String type;
 
-    @Column(name = "number_of_beds")
-    private Integer numberOfBeds;
+    @Column(name = "user_id")
+    private Long userId;
+
+    @Column(name = "creation_date")
+    private ZonedDateTime creationDate;
 }

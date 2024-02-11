@@ -6,5 +6,8 @@ import java.util.List;
 
 @Data
 public class BedroomDTO {
-    private List<SleepingArrangementDTO> arrangements;
+    private Integer doubleNum;
+    private Integer singleNum;
+    private Integer queenNum;
+    private Integer sofaNum;
 }

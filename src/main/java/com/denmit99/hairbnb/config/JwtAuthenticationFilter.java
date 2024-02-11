@@ -57,7 +57,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         if (email != null && SecurityContextHolder.getContext().getAuthentication() == null) {
             var userBO = userService.findByEmail(email);
             if (userBO == null) {
-                throw new AccessDeniedException("");
+                throw new AccessDeniedException("User with the provided e-mail doesn't exist");
             }
             var token = tokenInfoService.findByJWT(tokenString);
             var userToken = conversionService.convert(userBO, UserToken.class);

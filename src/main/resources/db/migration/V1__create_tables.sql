@@ -33,12 +33,14 @@ CREATE TABLE IF NOT EXISTS public.listing (
     update_date timestamptz NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS public.bed_arrangement (
+CREATE TABLE IF NOT EXISTS public.bedroom (
     id SERIAL PRIMARY KEY,
     listing_id BIGINT NOT NULL REFERENCES public.listing(id),
     room_number INT NOT NULL,
-    bed_type TEXT NOT NULL,
-    number_of_beds INT NOT NULL
+    single_beds_number INT NOT NULL,
+    double_beds_number INT NOT NULL,
+    queen_beds_number INT NOT NULL,
+    sofa_beds_number INT NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS public.amenity_category (

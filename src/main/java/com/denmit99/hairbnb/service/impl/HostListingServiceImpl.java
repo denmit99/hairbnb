@@ -7,7 +7,7 @@ import com.denmit99.hairbnb.model.dto.AddressDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.entity.Listing;
 import com.denmit99.hairbnb.repository.ListingRepository;
-import com.denmit99.hairbnb.service.BedArrangementService;
+import com.denmit99.hairbnb.service.BedroomService;
 import com.denmit99.hairbnb.service.HostListingService;
 import com.denmit99.hairbnb.service.ListingAmenityService;
 import com.denmit99.hairbnb.service.UserService;
@@ -29,7 +29,7 @@ public class HostListingServiceImpl implements HostListingService {
     private ListingRepository listingRepository;
 
     @Autowired
-    private BedArrangementService bedArrangementService;
+    private BedroomService bedroomService;
 
     @Autowired
     private ListingAmenityService listingAmenityService;
@@ -43,6 +43,7 @@ public class HostListingServiceImpl implements HostListingService {
     @Transactional
     @Override
     public ListingBO create(ListingCreateRequestDTO requestDTO) {
+        var now = ZonedDateTime.now();
         var user = userService.getCurrent();
         var listing = Listing.builder()
                 .title(requestDTO.getTitle())
@@ -55,11 +56,11 @@ public class HostListingServiceImpl implements HostListingService {
                 .placeType(requestDTO.getPlaceType())
                 .maxNumberOfGuests(requestDTO.getMaxGuests())
                 .numberOfBathrooms(requestDTO.getNumberOfBathrooms())
-                .creationDate(ZonedDateTime.now())
-                .updateDate(ZonedDateTime.now())
+                .creationDate(now)
+                .updateDate(now)
                 .build();
         var res = listingRepository.save(listing);
-        bedArrangementService.save(res.getId(), requestDTO.getBedrooms());
+        bedroomService.save(res.getId(), requestDTO.getBedrooms());
         listingAmenityService.save(res.getId(), requestDTO.getAmenities());
         return conversionService.convert(res, ListingBO.class);
     }
@@ -75,7 +76,7 @@ public class HostListingServiceImpl implements HostListingService {
         if (!Objects.equals(currentUser.getId(), listing.get().getUserId())) {
             throw new AccessDeniedException("Wrong user");
         }
-        bedArrangementService.deleteByListingId(listingId);
+        bedroomService.deleteByListingId(listingId);
         listingAmenityService.deleteByListingId(listingId);
         listingRepository.deleteById(listingId);
     }

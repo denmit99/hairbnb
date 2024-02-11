@@ -5,7 +5,6 @@ import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.bo.auth.UserCreateRequestBO;
 import com.denmit99.hairbnb.model.entity.User;
 import com.denmit99.hairbnb.repository.UserRepository;
-import com.denmit99.hairbnb.service.AuthenticationService;
 import com.denmit99.hairbnb.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
