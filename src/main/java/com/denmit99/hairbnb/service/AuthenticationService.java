@@ -1,6 +1,5 @@
 package com.denmit99.hairbnb.service;
 
-import com.denmit99.hairbnb.model.UserToken;
 import com.denmit99.hairbnb.model.bo.auth.LoginResponseBO;
 import com.denmit99.hairbnb.model.bo.auth.RegisterResponseBO;
 import com.denmit99.hairbnb.model.dto.auth.LoginRequestDTO;
