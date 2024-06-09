@@ -1,10 +1,12 @@
 package com.denmit99.hairbnb.service.impl;
 
+import com.denmit99.hairbnb.model.bo.BedroomBO;
 import com.denmit99.hairbnb.model.dto.BedroomDTO;
 import com.denmit99.hairbnb.model.entity.Bedroom;
 import com.denmit99.hairbnb.repository.BedroomRepository;
 import com.denmit99.hairbnb.service.BedroomService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -16,8 +18,11 @@ public class BedroomServiceImpl implements BedroomService {
     @Autowired
     private BedroomRepository bedroomRepository;
 
+    @Autowired
+    private ConversionService conversionService;
+
     @Override
-    public void save(Long listingId, List<BedroomDTO> bedrooms) {
+    public List<BedroomBO> save(Long listingId, List<BedroomDTO> bedrooms) {
         ArrayList<Bedroom> entities = new ArrayList<>();
         for (int i = 0; i < bedrooms.size(); i++) {
             var bedroom = bedrooms.get(i);
@@ -31,7 +36,10 @@ public class BedroomServiceImpl implements BedroomService {
                     .build();
             entities.add(bedroomEntity);
         }
-        bedroomRepository.saveAll(entities);
+        List<Bedroom> savedBedrooms = bedroomRepository.saveAll(entities);
+        return savedBedrooms.stream()
+                .map(b -> conversionService.convert(b, BedroomBO.class))
+                .toList();
     }
 
     @Override

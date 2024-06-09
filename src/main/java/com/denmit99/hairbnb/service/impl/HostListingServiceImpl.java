@@ -1,6 +1,7 @@
 package com.denmit99.hairbnb.service.impl;
 
 import com.denmit99.hairbnb.exception.NotFoundException;
+import com.denmit99.hairbnb.model.bo.BedroomBO;
 import com.denmit99.hairbnb.model.bo.ListingBO;
 import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.dto.AddressDTO;
@@ -11,6 +12,7 @@ import com.denmit99.hairbnb.service.BedroomService;
 import com.denmit99.hairbnb.service.HostListingService;
 import com.denmit99.hairbnb.service.ListingAmenityService;
 import com.denmit99.hairbnb.service.UserService;
+import com.denmit99.hairbnb.service.converter.ListingToListingBOConverter;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
@@ -19,6 +21,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 import java.util.Objects;
 import java.util.stream.Stream;
 
@@ -40,6 +43,9 @@ public class HostListingServiceImpl implements HostListingService {
     @Autowired
     private ConversionService conversionService;
 
+    @Autowired
+    private ListingToListingBOConverter listingToListingBOConverter;
+
     @Transactional
     @Override
     public ListingBO create(ListingCreateRequestDTO requestDTO) {
@@ -59,10 +65,10 @@ public class HostListingServiceImpl implements HostListingService {
                 .creationDate(now)
                 .updateDate(now)
                 .build();
-        var res = listingRepository.save(listing);
-        bedroomService.save(res.getId(), requestDTO.getBedrooms());
+        Listing res = listingRepository.save(listing);
+        List<BedroomBO> bedroomsBO = bedroomService.save(res.getId(), requestDTO.getBedrooms());
         listingAmenityService.save(res.getId(), requestDTO.getAmenities());
-        return conversionService.convert(res, ListingBO.class);
+        return listingToListingBOConverter.convert(res, bedroomsBO);
     }
 
     @Override
@@ -87,7 +93,8 @@ public class HostListingServiceImpl implements HostListingService {
         if (res.isEmpty()) {
             throw new NotFoundException(String.format("Listing with id %s is not found", listingId));
         }
-        return conversionService.convert(res.get(), ListingBO.class);
+        //TODO get List<BedroomsBO>
+        return listingToListingBOConverter.convert(res.get(), null);
     }
 
     private String convertAddressToString(AddressDTO addressDTO) {

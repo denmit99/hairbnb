@@ -8,6 +8,7 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
 import java.util.Set;
 
 @Builder
@@ -36,6 +37,8 @@ public class ListingBO {
     private Integer maxGuests;
 
     private Integer numberOfBathrooms;
+
+    private List<BedroomBO> bedrooms;
 
     private Set<String> amenities;
 }

@@ -1,13 +1,11 @@
-package com.denmit99.hairbnb.model.dto;
+package com.denmit99.hairbnb.model.bo;
 
 import lombok.Builder;
 import lombok.Data;
 
-import java.util.List;
-
 @Data
 @Builder
-public class BedroomDTO {
+public class BedroomBO {
     private Integer number;
     private Integer doubleNum;
     private Integer singleNum;

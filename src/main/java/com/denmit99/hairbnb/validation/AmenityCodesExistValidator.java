@@ -16,8 +16,7 @@ public class AmenityCodesExistValidator implements ConstraintValidator<AmenityCo
 
     @Override
     public boolean isValid(Set<String> value, ConstraintValidatorContext context) {
-  //      var res = amenityRepository.getAllNonExistingCodes(value);
-//        return res.isEmpty();
+        //TODO
         return true;
     }
 }
