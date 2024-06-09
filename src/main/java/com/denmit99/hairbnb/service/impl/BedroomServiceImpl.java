@@ -43,6 +43,14 @@ public class BedroomServiceImpl implements BedroomService {
     }
 
     @Override
+    public List<BedroomBO> getByListingId(Long listingId) {
+        return bedroomRepository.findAllByListingId(listingId)
+                .stream()
+                .map(b -> conversionService.convert(b, BedroomBO.class))
+                .toList();
+    }
+
+    @Override
     public void deleteByListingId(Long listingId) {
         bedroomRepository.deleteByListingId(listingId);
     }

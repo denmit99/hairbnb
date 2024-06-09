@@ -3,6 +3,7 @@ package com.denmit99.hairbnb.service.impl;
 import com.denmit99.hairbnb.exception.NotFoundException;
 import com.denmit99.hairbnb.model.bo.BedroomBO;
 import com.denmit99.hairbnb.model.bo.ListingBO;
+import com.denmit99.hairbnb.model.bo.ListingLightBO;
 import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.dto.AddressDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
@@ -23,6 +24,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
@@ -49,9 +51,9 @@ public class HostListingServiceImpl implements HostListingService {
     @Transactional
     @Override
     public ListingBO create(ListingCreateRequestDTO requestDTO) {
-        var now = ZonedDateTime.now();
-        var user = userService.getCurrent();
-        var listing = Listing.builder()
+        ZonedDateTime now = ZonedDateTime.now();
+        UserBO user = userService.getCurrent();
+        Listing listing = Listing.builder()
                 .title(requestDTO.getTitle())
                 .userId(user.getId())
                 .description(requestDTO.getDescription())
@@ -75,7 +77,7 @@ public class HostListingServiceImpl implements HostListingService {
     @Transactional
     public void delete(Long listingId) {
         UserBO currentUser = userService.getCurrent();
-        var listing = listingRepository.findById(listingId);
+        Optional<Listing> listing = listingRepository.findById(listingId);
         if (listing.isEmpty()) {
             throw new NotFoundException(String.format("Listing with id %s is not found", listingId));
         }
@@ -89,12 +91,20 @@ public class HostListingServiceImpl implements HostListingService {
 
     @Override
     public ListingBO get(Long listingId) {
-        var res = listingRepository.findById(listingId);
+        Optional<Listing> res = listingRepository.findById(listingId);
         if (res.isEmpty()) {
             throw new NotFoundException(String.format("Listing with id %s is not found", listingId));
         }
-        //TODO get List<BedroomsBO>
-        return listingToListingBOConverter.convert(res.get(), null);
+        List<BedroomBO> bedrooms = bedroomService.getByListingId(listingId);
+        return listingToListingBOConverter.convert(res.get(), bedrooms);
+    }
+
+    @Override
+    public List<ListingLightBO> getAllByUserId(Long userId) {
+        var listings = listingRepository.findAllByUserId(userId);
+        return listings.stream()
+                .map(l -> conversionService.convert(l, ListingLightBO.class))
+                .toList();
     }
 
     private String convertAddressToString(AddressDTO addressDTO) {

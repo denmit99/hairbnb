@@ -3,7 +3,9 @@ package com.denmit99.hairbnb.controller.host;
 import com.denmit99.hairbnb.model.bo.ListingBO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.dto.ListingDTO;
+import com.denmit99.hairbnb.model.dto.ListingLightDTO;
 import com.denmit99.hairbnb.service.HostListingService;
+import com.denmit99.hairbnb.service.UserService;
 import com.denmit99.hairbnb.validation.ListingIdExists;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,12 +18,17 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/host/listings")
 public class HostListingController {
 
     @Autowired
     private HostListingService hostListingService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private ConversionService conversionService;
@@ -38,13 +45,16 @@ public class HostListingController {
     }
 
     @GetMapping
-    public String search() {
-        return "search";
+    public List<ListingLightDTO> getAll() {
+        var user = userService.getCurrent();
+        var listings = hostListingService.getAllByUserId(user.getId());
+        return listings.stream()
+                .map(l -> conversionService.convert(l, ListingLightDTO.class))
+                .toList();
     }
 
     @GetMapping("/{id}")
     public ListingDTO get(@PathVariable("id") @ListingIdExists Long listingId) {
-        //TODO add bedrooms to DTO or create a new class for this response
         return conversionService.convert(hostListingService.get(listingId), ListingDTO.class);
     }
 

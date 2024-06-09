@@ -8,7 +8,7 @@ import java.util.List;
 public interface BedroomService {
     List<BedroomBO> save(Long listingId, List<BedroomDTO> bedrooms);
 
-    //TODO getByListingId
+    List<BedroomBO> getByListingId(Long listingId);
 
     void deleteByListingId(Long listingId);
 }

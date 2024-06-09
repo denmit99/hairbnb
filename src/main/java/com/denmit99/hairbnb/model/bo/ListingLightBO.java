@@ -1,4 +1,4 @@
-package com.denmit99.hairbnb.model.dto;
+package com.denmit99.hairbnb.model.bo;
 
 import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
@@ -8,14 +8,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Set;
-
-@Data
 @Builder
-@NoArgsConstructor
+@Data
 @AllArgsConstructor
-public class ListingDTO {
+@NoArgsConstructor
+public class ListingLightBO {
     private Long id;
 
     private String title;
@@ -31,10 +28,4 @@ public class ListingDTO {
     private PropertyType propertyType;
 
     private PlaceType placeType;
-
-    private List<BedroomDTO> bedrooms;
-
-    private Integer numberOfBathrooms;
-
-    private Set<String> amenities;
 }

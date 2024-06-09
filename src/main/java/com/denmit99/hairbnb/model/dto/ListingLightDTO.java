@@ -8,14 +8,11 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
-import java.util.Set;
-
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-public class ListingDTO {
+public class ListingLightDTO {
     private Long id;
 
     private String title;
@@ -32,9 +29,4 @@ public class ListingDTO {
 
     private PlaceType placeType;
 
-    private List<BedroomDTO> bedrooms;
-
-    private Integer numberOfBathrooms;
-
-    private Set<String> amenities;
 }
