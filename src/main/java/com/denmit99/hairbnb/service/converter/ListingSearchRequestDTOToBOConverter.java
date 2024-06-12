@@ -6,7 +6,8 @@ import org.springframework.core.convert.converter.Converter;
 import org.springframework.stereotype.Component;
 
 @Component
-public class ListingSearchRequestDTOToBOConverter implements Converter<ListingSearchRequestDTO, ListingSearchRequestBO> {
+public class ListingSearchRequestDTOToBOConverter
+        implements Converter<ListingSearchRequestDTO, ListingSearchRequestBO> {
     @Override
     public ListingSearchRequestBO convert(ListingSearchRequestDTO source) {
         return ListingSearchRequestBO.builder()

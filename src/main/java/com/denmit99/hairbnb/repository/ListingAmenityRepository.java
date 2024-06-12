@@ -7,9 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.Set;
 
 public interface ListingAmenityRepository extends JpaRepository<ListingAmenity, Long> {
-    @Query("SELECT a.code FROM Amenity a JOIN ListingAmenity la " +
-            "ON la.amenityId = a.id " +
-            "WHERE la.listingId = :listingId")
+    @Query("SELECT a.code FROM Amenity a JOIN ListingAmenity la "
+            + "ON la.amenityId = a.id "
+            + "WHERE la.listingId = :listingId")
     Set<String> findAllByListingId(Long listingId);
 
     void deleteByListingId(Long listingId);

@@ -56,13 +56,13 @@ public class JwtServiceImpl implements JwtService {
         return buildToken(token, refreshExpiration.toMillis());
     }
 
-    private String buildToken(UserToken token, long expiration) {
+    private String buildToken(UserToken token, long expirationPeriod) {
         var now = System.currentTimeMillis();
         return Jwts.builder()
                 .setClaims(getClaims(token))
                 .setSubject(token.getUsername())
                 .setIssuedAt(new Date(now))
-                .setExpiration(new Date(now + expiration))
+                .setExpiration(new Date(now + expirationPeriod))
                 .signWith(getSigningKey(), SignatureAlgorithm.HS256)
                 .compact();
     }

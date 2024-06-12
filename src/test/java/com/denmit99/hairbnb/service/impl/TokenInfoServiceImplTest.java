@@ -21,6 +21,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class TokenInfoServiceImplTest {
 
+    private static final int DEFAULT_STRING_SIZE = 5;
+
     @Mock
     private TokenInfoRepository tokenInfoRepository;
 
@@ -29,7 +31,7 @@ public class TokenInfoServiceImplTest {
 
     @Test
     public void findByJWT() {
-        String token = RandomStringUtils.randomAlphanumeric(5);
+        String token = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         TokenInfo tokenInfo = new TokenInfo();
         Mockito.when(tokenInfoRepository.findByToken(token))
                 .thenReturn(List.of(tokenInfo));
@@ -56,7 +58,7 @@ public class TokenInfoServiceImplTest {
     @Test
     public void create() {
         Long userId = RandomUtils.nextLong();
-        String token = RandomStringUtils.randomAlphanumeric(5);
+        String token = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
 
         service.create(userId, token);
 

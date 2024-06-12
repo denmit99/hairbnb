@@ -28,6 +28,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class UserServiceImplTest {
 
+    private static final int DEFAULT_STRING_SIZE = 5;
+
     @Mock
     private UserRepository repository;
 
@@ -39,7 +41,7 @@ public class UserServiceImplTest {
 
     @Test
     public void findByEmail() {
-        String email = RandomStringUtils.randomAlphanumeric(5);
+        String email = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         User userEntity = new User();
         when(repository.findByEmail(email))
                 .thenReturn(userEntity);
@@ -55,7 +57,7 @@ public class UserServiceImplTest {
 
     @Test
     public void findByEmailNotFoundReturnsNull() {
-        String email = RandomStringUtils.randomAlphanumeric(5);
+        String email = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         when(repository.findByEmail(email))
                 .thenReturn(null);
 
@@ -77,7 +79,7 @@ public class UserServiceImplTest {
 
     @Test
     public void getCurrent() {
-        String email = RandomStringUtils.randomAlphanumeric(5);
+        String email = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         SecurityContext securityContext = Mockito.mock(SecurityContext.class);
         Authentication authentication = Mockito.mock(Authentication.class);
         UserToken userToken = new UserToken();

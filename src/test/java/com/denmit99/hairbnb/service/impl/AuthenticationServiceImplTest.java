@@ -29,6 +29,8 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class AuthenticationServiceImplTest {
 
+    private static final int DEFAULT_STRING_SIZE = 5;
+
     @Mock
     private UserService userService;
 
@@ -51,15 +53,15 @@ public class AuthenticationServiceImplTest {
     public void register() {
         RegisterRequestDTO requestDTO = new RegisterRequestDTO();
         when(passwordEncoder.encode(requestDTO.getPassword()))
-                .thenReturn(RandomStringUtils.randomAlphanumeric(5));
+                .thenReturn(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
         UserBO userBO = new UserBO();
         when(userService.create(any()))
                 .thenReturn(userBO);
         UserToken userToken = new UserToken();
         when(conversionService.convert(userBO, UserToken.class))
                 .thenReturn(userToken);
-        String token = RandomStringUtils.randomAlphanumeric(5);
-        String refreshToken = RandomStringUtils.randomAlphanumeric(5);
+        String token = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
+        String refreshToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         when(jwtService.generate(userToken))
                 .thenReturn(token);
         when(jwtService.generateRefreshToken(userToken))
@@ -74,7 +76,7 @@ public class AuthenticationServiceImplTest {
     @Test
     public void login() {
         LoginRequestDTO requestDTO = new LoginRequestDTO();
-        requestDTO.setEmail(RandomStringUtils.randomAlphanumeric(5));
+        requestDTO.setEmail(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
         UserBO userBO = new UserBO();
         userBO.setId(RandomUtils.nextLong());
         when(userService.findByEmail(requestDTO.getEmail()))
@@ -82,8 +84,8 @@ public class AuthenticationServiceImplTest {
         UserToken userToken = new UserToken();
         when(conversionService.convert(userBO, UserToken.class))
                 .thenReturn(userToken);
-        String token = RandomStringUtils.randomAlphanumeric(5);
-        String refreshToken = RandomStringUtils.randomAlphanumeric(5);
+        String token = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
+        String refreshToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         when(jwtService.generate(userToken)).thenReturn(token);
         when(jwtService.generateRefreshToken(userToken)).thenReturn(refreshToken);
 
@@ -99,7 +101,7 @@ public class AuthenticationServiceImplTest {
     @Test
     public void loginUserEmailNotFoundThrowsException() {
         LoginRequestDTO requestDTO = new LoginRequestDTO();
-        requestDTO.setEmail(RandomStringUtils.randomAlphanumeric(5));
+        requestDTO.setEmail(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
         when(userService.findByEmail(requestDTO.getEmail()))
                 .thenReturn(null);
 

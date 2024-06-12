@@ -3,7 +3,7 @@ package com.denmit99.hairbnb.service;
 import com.denmit99.hairbnb.model.entity.TokenInfo;
 
 public interface TokenInfoService {
-    TokenInfo findByJWT(String JWT);
+    TokenInfo findByJWT(String token);
 
     void revokeAll(Long userId);
 

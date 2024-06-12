@@ -18,7 +18,7 @@ public class HostImageController {
     private FileStorageService fileStorageService;
 
     @PostMapping("/upload")
-    public void uploadFile(@RequestParam("file") MultipartFile file){
+    public void uploadFile(@RequestParam("file") MultipartFile file) {
         try {
             fileStorageService.upload(file);
         } catch (IOException e) {
