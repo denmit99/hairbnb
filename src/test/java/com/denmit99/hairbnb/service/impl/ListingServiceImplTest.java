@@ -1,7 +1,7 @@
 package com.denmit99.hairbnb.service.impl;
 
 import com.denmit99.hairbnb.exception.NotFoundException;
-import com.denmit99.hairbnb.model.bo.ListingBO;
+import com.denmit99.hairbnb.model.bo.BedroomBO;
 import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.entity.Listing;
@@ -9,6 +9,7 @@ import com.denmit99.hairbnb.repository.ListingRepository;
 import com.denmit99.hairbnb.service.BedroomService;
 import com.denmit99.hairbnb.service.ListingAmenityService;
 import com.denmit99.hairbnb.service.UserService;
+import com.denmit99.hairbnb.service.converter.ListingToListingBOConverter;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -19,15 +20,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.access.AccessDeniedException;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-public class HostListingServiceImplTest {
+public class ListingServiceImplTest {
 
     @Mock
     private ListingRepository listingRepository;
@@ -44,19 +47,19 @@ public class HostListingServiceImplTest {
     @Mock
     private ConversionService conversionService;
 
+    @Mock
+    private ListingToListingBOConverter listingToListingBOConverter;
+
     @InjectMocks
-    private HostListingServiceImpl service;
+    private ListingServiceImpl service;
 
     @Test
     public void create() {
         UserBO user = new UserBO();
         Mockito.when(userService.getCurrent()).thenReturn(user);
         Listing listingEntity = new Listing();
-        ListingBO listingBO = new ListingBO();
         Mockito.when(listingRepository.save(any()))
                 .thenReturn(listingEntity);
-        Mockito.when(conversionService.convert(listingEntity, ListingBO.class))
-                .thenReturn(listingBO);
         ListingCreateRequestDTO requestDTO = new ListingCreateRequestDTO();
 
         service.create(requestDTO);
@@ -65,6 +68,7 @@ public class HostListingServiceImplTest {
         verify(listingRepository).save(any());
         verify(bedroomService).save(any(), any());
         verify(listingAmenityService).save(any(), any());
+        verify(listingToListingBOConverter).convert(eq(listingEntity), any());
     }
 
     @Test
@@ -113,12 +117,15 @@ public class HostListingServiceImplTest {
     public void get() {
         Long listingId = RandomUtils.nextLong();
         Listing listing = new Listing();
+        List<BedroomBO> bedrooms = List.of(new BedroomBO());
         when(listingRepository.findById(listingId))
                 .thenReturn(Optional.of(listing));
+        when(bedroomService.getByListingId(listingId))
+                .thenReturn(bedrooms);
 
         service.get(listingId);
 
-        verify(conversionService).convert(listing, ListingBO.class);
+        verify(listingToListingBOConverter).convert(listing, bedrooms);
     }
 
     @Test

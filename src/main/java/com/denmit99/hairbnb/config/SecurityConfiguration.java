@@ -45,7 +45,7 @@ public class SecurityConfiguration {
                                 .requestMatchers("/host/**")
                                 .hasRole("HOST")
                                 .requestMatchers("/**")
-                                .hasRole("USER")
+                                .hasAnyRole("USER", "HOST")//TODO fix this and make every HOST have role USER
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

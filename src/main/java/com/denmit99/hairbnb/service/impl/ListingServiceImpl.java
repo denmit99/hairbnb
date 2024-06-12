@@ -4,14 +4,15 @@ import com.denmit99.hairbnb.exception.NotFoundException;
 import com.denmit99.hairbnb.model.bo.BedroomBO;
 import com.denmit99.hairbnb.model.bo.ListingBO;
 import com.denmit99.hairbnb.model.bo.ListingLightBO;
+import com.denmit99.hairbnb.model.bo.ListingSearchRequestBO;
 import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.dto.AddressDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.entity.Listing;
 import com.denmit99.hairbnb.repository.ListingRepository;
 import com.denmit99.hairbnb.service.BedroomService;
-import com.denmit99.hairbnb.service.HostListingService;
 import com.denmit99.hairbnb.service.ListingAmenityService;
+import com.denmit99.hairbnb.service.ListingService;
 import com.denmit99.hairbnb.service.UserService;
 import com.denmit99.hairbnb.service.converter.ListingToListingBOConverter;
 import org.apache.logging.log4j.util.Strings;
@@ -28,7 +29,7 @@ import java.util.Optional;
 import java.util.stream.Stream;
 
 @Service
-public class HostListingServiceImpl implements HostListingService {
+public class ListingServiceImpl implements ListingService {
 
     @Autowired
     private ListingRepository listingRepository;
@@ -97,6 +98,18 @@ public class HostListingServiceImpl implements HostListingService {
         }
         List<BedroomBO> bedrooms = bedroomService.getByListingId(listingId);
         return listingToListingBOConverter.convert(res.get(), bedrooms);
+    }
+
+    @Override
+    public List<ListingLightBO> search(ListingSearchRequestBO requestBO) {
+        var res = listingRepository.search(
+                requestBO.getMinPrice(),
+                requestBO.getMaxPrice(),
+                requestBO.getPropertyTypes().stream().map(Enum::name).toList(),
+                requestBO.getPlaceTypes().stream().map(Enum::name).toList(),
+                requestBO.getNumberOfBathrooms(),
+                requestBO.getAmenities());
+        return res.stream().map(l -> conversionService.convert(l, ListingLightBO.class)).toList();
     }
 
     @Override
