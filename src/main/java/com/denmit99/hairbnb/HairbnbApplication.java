@@ -3,11 +3,9 @@ package com.denmit99.hairbnb;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
+@SuppressWarnings({"HideUtilityClassConstructor"})
 @SpringBootApplication
-public final class HairbnbApplication {
-
-    private HairbnbApplication() {
-    }
+public class HairbnbApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(HairbnbApplication.class, args);
