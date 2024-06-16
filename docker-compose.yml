@@ -20,6 +20,10 @@ services:
       POSTGRES_PASSWORD: 123456
       POSTGRES_USER: admin
       POSTGRES_DB: hairbnb
+  front:
+    image: denmit99/hairbnb-front:0.0.1
+    ports:
+      - 3000:3000
 
 volumes:
   hairbnb:
