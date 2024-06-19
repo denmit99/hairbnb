@@ -46,12 +46,14 @@ public class ListingCreateRequestDTO {
     private Integer maxGuests;
 
     @NotEmpty
+    @Size(max = Constants.MAX_BEDROOMS)
     private List<BedroomDTO> bedrooms;
 
     @NotNull
+    @Min(0)
+    @Max(Constants.MAX_BATHROOMS)
     private Integer numberOfBathrooms;
 
-    //TODO check that all are valid
     @AmenityCodesExist
     private Set<String> amenities;
 

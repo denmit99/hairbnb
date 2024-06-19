@@ -1,5 +1,6 @@
 package com.denmit99.hairbnb.model.dto;
 
+import com.denmit99.hairbnb.constants.Constants;
 import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
 import com.denmit99.hairbnb.validation.AmenityCodesExist;
@@ -23,10 +24,16 @@ public class ListingSearchRequestDTO {
 
     private List<PlaceType> placeTypes;
 
+    @Min(0)
+    @Max(Constants.MAX_BEDROOMS)
     private Integer numberOfBedrooms;
 
+    @Min(0)
+    @Max(Constants.MAX_BEDS)
     private Integer numberOfBeds;
 
+    @Min(0)
+    @Max(Constants.MAX_BATHROOMS)
     private Integer numberOfBathrooms;
 
     @AmenityCodesExist

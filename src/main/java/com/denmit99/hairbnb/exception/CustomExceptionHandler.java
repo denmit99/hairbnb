@@ -18,7 +18,10 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<Object> validationException(MethodArgumentNotValidException ex) {
-        ErrorMessage error = new ErrorMessage("invalid.request", ex.getMessage());
+        var errors = ex.getBindingResult().getFieldErrors().stream()
+                .map(e -> e.getField() + ": " + e.getDefaultMessage())
+                .toList().toString();
+        ErrorMessage error = new ErrorMessage("invalid.request", errors);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 

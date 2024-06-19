@@ -22,7 +22,7 @@ public class ListingAmenityServiceImpl implements ListingAmenityService {
 
     @Override
     public List<ListingAmenity> save(Long listingId, Set<String> amenities) {
-        List<Amenity> amenityEntities = amenityRepository.getAllByCodes(amenities);
+        List<Amenity> amenityEntities = amenityRepository.getAllByCodeIn(amenities);
         var listingAmenityEntities = amenityEntities.stream()
                 .map(a -> ListingAmenity.builder()
                         .listingId(listingId)

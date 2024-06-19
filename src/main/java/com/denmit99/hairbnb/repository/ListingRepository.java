@@ -19,7 +19,7 @@ public interface ListingRepository extends JpaRepository<Listing, Long> {
             AND (:maxPrice is NULL OR price <= :maxPrice)
             AND property_type IN :propertyTypes
             AND place_type IN :placeTypes
-            AND num_of_bathrooms = :numberOfBathrooms
+            AND :numberOfBathrooms IS NULL OR :numberOfBathrooms = 0 OR num_of_bathrooms = :numberOfBathrooms
             AND a.code in :amenities
             """)
     List<Listing> search(Long minPrice,
