@@ -23,7 +23,7 @@ public class BedroomServiceImpl implements BedroomService {
 
     @Override
     public List<BedroomBO> save(Long listingId, List<BedroomDTO> bedrooms) {
-        ArrayList<Bedroom> entities = new ArrayList<>();
+        List<Bedroom> entities = new ArrayList<>();
         for (int i = 0; i < bedrooms.size(); i++) {
             var bedroom = bedrooms.get(i);
             var bedroomEntity = Bedroom.builder()

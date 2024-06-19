@@ -10,6 +10,7 @@ services:
       - SPRING_DATASOURCE_PASSWORD=123456
     depends_on:
       - db
+    profiles: [api, all]
   db:
     image: postgres:15.4
     ports:
@@ -20,10 +21,12 @@ services:
       POSTGRES_PASSWORD: 123456
       POSTGRES_USER: admin
       POSTGRES_DB: hairbnb
+    profiles: [api, all]
   front:
     image: denmit99/hairbnb-front:0.0.1
     ports:
       - 3000:3000
+    profiles: [frontend, all]
 
 volumes:
   hairbnb:

@@ -2,6 +2,8 @@
 
 ## How to run
 
-`docker-compose up -d`
+`docker-compose --profile api up -d ` Start only backend + database
 
-`docker-compose up --build -d ` To rebuild all services and then start containers
+`docker-compose --profile all up -d` Start all services
+
+`docker-compose --profile all up -d --build`  To rebuild all services and then start containers
