@@ -13,6 +13,7 @@ CREATE TABLE IF NOT EXISTS token (
     id SERIAL PRIMARY KEY,
     user_id BIGINT REFERENCES user_info(id),
     token TEXT NOT NULL,
+    refresh_token TEXT NOT NULL,
     expired BOOLEAN NOT NULL DEFAULT FALSE,
     revoked BOOLEAN NOT NULL DEFAULT FALSE
 );

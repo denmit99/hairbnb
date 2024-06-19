@@ -29,6 +29,9 @@ public class TokenInfo {
     @Column(name = "token")
     private String token;
 
+    @Column(name = "refresh_token")
+    private String refreshToken;
+
     @Column(name = "expired")
     private boolean isExpired;
 

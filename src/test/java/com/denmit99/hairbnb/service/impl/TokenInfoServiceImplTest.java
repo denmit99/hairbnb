@@ -59,12 +59,14 @@ public class TokenInfoServiceImplTest {
     public void create() {
         Long userId = RandomUtils.nextLong();
         String token = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
+        String refreshToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
 
-        service.create(userId, token);
+        service.create(userId, token, refreshToken);
 
         TokenInfo expectedTokenInfo = TokenInfo.builder()
                 .userId(userId)
                 .token(token)
+                .refreshToken(refreshToken)
                 .isExpired(false)
                 .isRevoked(false)
                 .build();

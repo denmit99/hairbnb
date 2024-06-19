@@ -52,4 +52,9 @@ public class UserServiceImpl implements UserService {
         var currentUserToken = (UserToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
         return conversionService.convert(repository.findByEmail(currentUserToken.getEmail()), UserBO.class);
     }
+
+    @Override
+    public void updateLastLoginDate(Long userId, ZonedDateTime lastLoginDate) {
+        repository.updateLastLoginDate(userId, lastLoginDate);
+    }
 }

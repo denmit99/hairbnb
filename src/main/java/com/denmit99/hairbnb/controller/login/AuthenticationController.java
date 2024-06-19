@@ -10,8 +10,10 @@ import com.denmit99.hairbnb.service.AuthenticationService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +35,7 @@ public class AuthenticationController {
 
     @PostMapping("/logout")
     public void logout() {
-        //TODO
+        authenticationService.logout();
     }
 
     @PostMapping("/register")
@@ -43,8 +45,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/refresh")
-    public AuthenticationResponseDTO refresh(@Valid @RequestBody RefreshTokenRequestDTO requestDTO) {
-        //TODO
-        return null;
+    public AuthenticationResponseDTO refresh(@RequestHeader(HttpHeaders.AUTHORIZATION) String accessToken,
+                                             @Valid @RequestBody RefreshTokenRequestDTO requestDTO) {
+        LoginResponseBO loginResponseBO = authenticationService.refreshToken(accessToken.substring("Bearer ".length()),
+                requestDTO.getRefreshToken());
+        return conversionService.convert(loginResponseBO, AuthenticationResponseDTO.class);
     }
 }

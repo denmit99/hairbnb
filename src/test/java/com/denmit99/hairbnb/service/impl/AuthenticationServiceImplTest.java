@@ -95,7 +95,7 @@ public class AuthenticationServiceImplTest {
         assertEquals(token, res.getToken());
         assertEquals(refreshToken, res.getRefreshToken());
         verify(tokenService).revokeAll(userBO.getId());
-        verify(tokenService).create(userBO.getId(), token);
+        verify(tokenService).create(userBO.getId(), token, refreshToken);
     }
 
     @Test

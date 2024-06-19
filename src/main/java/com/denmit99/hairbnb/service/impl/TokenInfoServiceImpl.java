@@ -28,10 +28,11 @@ public class TokenInfoServiceImpl implements TokenInfoService {
     }
 
     @Override
-    public void create(Long userId, String token) {
+    public void create(Long userId, String token, String refreshToken) {
         var tokenEntity = TokenInfo.builder()
                 .userId(userId)
                 .token(token)
+                .refreshToken(refreshToken)
                 .isExpired(false)
                 .isRevoked(false)
                 .build();

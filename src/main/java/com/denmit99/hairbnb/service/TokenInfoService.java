@@ -7,5 +7,5 @@ public interface TokenInfoService {
 
     void revokeAll(Long userId);
 
-    void create(Long userId, String token);
+    void create(Long userId, String token, String refreshToken);
 }
