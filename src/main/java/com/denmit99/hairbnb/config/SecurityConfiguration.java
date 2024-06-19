@@ -1,9 +1,14 @@
 package com.denmit99.hairbnb.config;
 
+import com.denmit99.hairbnb.model.UserRole;
 import com.denmit99.hairbnb.service.UserTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.access.expression.method.DefaultMethodSecurityExpressionHandler;
+import org.springframework.security.access.expression.method.MethodSecurityExpressionHandler;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchy;
+import org.springframework.security.access.hierarchicalroles.RoleHierarchyImpl;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -41,11 +46,11 @@ public class SecurityConfiguration {
                         a.requestMatchers("/auth/**")
                                 .permitAll()
                                 .requestMatchers("/admin/**")
-                                .hasRole("ADMIN")
+                                .hasRole(UserRole.ADMIN.name())
                                 .requestMatchers("/host/**")
-                                .hasRole("HOST")
+                                .hasRole(UserRole.HOST.name())
                                 .requestMatchers("/**")
-                                .hasAnyRole("USER", "HOST")//TODO fix this and make every HOST have role USER
+                                .hasRole(UserRole.USER.name())
                                 .anyRequest().authenticated()
                 )
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
@@ -66,6 +71,21 @@ public class SecurityConfiguration {
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    static RoleHierarchy roleHierarchy() {
+        return RoleHierarchyImpl.withDefaultRolePrefix()
+                .role(UserRole.ADMIN.name()).implies(UserRole.HOST.name())
+                .role(UserRole.HOST.name()).implies(UserRole.USER.name())
+                .build();
+    }
+
+    @Bean
+    static MethodSecurityExpressionHandler methodSecurityExpressionHandler(RoleHierarchy roleHierarchy) {
+        DefaultMethodSecurityExpressionHandler expressionHandler = new DefaultMethodSecurityExpressionHandler();
+        expressionHandler.setRoleHierarchy(roleHierarchy);
+        return expressionHandler;
     }
 
 }
