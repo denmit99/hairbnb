@@ -25,15 +25,15 @@ public class ListingSearchRequestDTO {
     private List<PlaceType> placeTypes;
 
     @Min(0)
-    @Max(Constants.MAX_BEDROOMS)
+    @Max(Constants.LISTING_MAX_BEDROOMS)
     private Integer numberOfBedrooms;
 
     @Min(0)
-    @Max(Constants.MAX_BEDS)
+    @Max(Constants.LISTING_MAX_BEDS)
     private Integer numberOfBeds;
 
     @Min(0)
-    @Max(Constants.MAX_BATHROOMS)
+    @Max(Constants.LISTING_MAX_BATHROOMS)
     private Integer numberOfBathrooms;
 
     @AmenityCodesExist

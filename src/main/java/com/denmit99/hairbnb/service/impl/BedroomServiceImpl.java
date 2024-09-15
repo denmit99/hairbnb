@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class BedroomServiceImpl implements BedroomService {
@@ -29,10 +30,10 @@ public class BedroomServiceImpl implements BedroomService {
             var bedroomEntity = Bedroom.builder()
                     .listingId(listingId)
                     .roomNumber(i)
-                    .singleBedsNum(bedroom.getSingleNum())
-                    .doubleBedsNum(bedroom.getDoubleNum())
-                    .queenBedsNum(bedroom.getQueenNum())
-                    .sofaBedsNum(bedroom.getSofaNum())
+                    .singleBedsNum(Optional.ofNullable(bedroom.getSingleNum()).orElse(0))
+                    .doubleBedsNum(Optional.ofNullable(bedroom.getDoubleNum()).orElse(0))
+                    .queenBedsNum(Optional.ofNullable(bedroom.getQueenNum()).orElse(0))
+                    .sofaBedsNum(Optional.ofNullable(bedroom.getSofaNum()).orElse(0))
                     .build();
             entities.add(bedroomEntity);
         }
