@@ -47,6 +47,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 public class HostListingControllerTest {
 
     private static final String HOST_LISTING_URI_PREFIX = "/host/listings";
+    private static final String ROLE_HOST = "HOST";
 
     @Autowired
     private MockMvc mockMvc;
@@ -76,7 +77,7 @@ public class HostListingControllerTest {
     private AmenityRepository amenityRepository;
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_Valid_ReturnsOk() throws Exception {
         testCreateRequestDtoValidation(dto -> {
         }, status().isOk());
@@ -84,67 +85,71 @@ public class HostListingControllerTest {
 
     //TODO combine these two annotations into one custom
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_TitleIsBlank_Returns400() throws Exception {
         testCreateRequestDtoValidation(dto -> dto.setTitle(""), status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_TitleIsNull_Returns400() throws Exception {
         testCreateRequestDtoValidation(dto -> dto.setTitle(null), status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_TitleTooLong_Returns400() throws Exception {
-        testCreateRequestDtoValidation(dto -> dto.setTitle(RandomStringUtils.randomAlphanumeric(101)), status().isBadRequest());
+        testCreateRequestDtoValidation(dto -> dto.setTitle(RandomStringUtils.randomAlphanumeric(101)),
+                status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_DescriptionIsBlank_Returns400() throws Exception {
         testCreateRequestDtoValidation(dto -> dto.setDescription(""), status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_DescriptionIsNull_Returns400() throws Exception {
         testCreateRequestDtoValidation(dto -> dto.setDescription(null), status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_DescriptionTooLong_Returns400() throws Exception {
-        testCreateRequestDtoValidation(dto -> dto.setDescription(RandomStringUtils.randomAlphanumeric(501)), status().isBadRequest());
+        testCreateRequestDtoValidation(dto -> dto.setDescription(RandomStringUtils.randomAlphanumeric(501)),
+                status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_AddressIsNull_Returns400() throws Exception {
         testCreateRequestDtoValidation(dto -> dto.setAddress(null), status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_AddressZipCodeContainsLetters_Returns400() throws Exception {
-        testCreateRequestDtoValidation(dto -> dto.getAddress().setZipCode(RandomStringUtils.randomAlphanumeric(5)), status().isBadRequest());
+        testCreateRequestDtoValidation(dto -> dto.getAddress()
+                .setZipCode(RandomStringUtils.randomAlphanumeric(5)), status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_AddressZipCodeTooLong_Returns400() throws Exception {
-        testCreateRequestDtoValidation(dto -> dto.getAddress().setZipCode(RandomStringUtils.randomNumeric(30)), status().isBadRequest());
+        testCreateRequestDtoValidation(dto -> dto.getAddress().setZipCode(RandomStringUtils.randomNumeric(30)),
+                status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_PricePerNightTooLow_Returns400() throws Exception {
         testCreateRequestDtoValidation(dto -> dto.setPricePerNight(0), status().isBadRequest());
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void create_GuestsMoreThanBeds_Returns400() throws Exception {
         testCreateRequestDtoValidation(dto -> {
             dto.setMaxGuests(4);
@@ -159,7 +164,7 @@ public class HostListingControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void delete_NonExisting_Returns4xxCode() throws Exception {
         Long listingId = RandomUtils.nextLong();
         when(listingRepository.existsById(listingId)).thenReturn(false);
@@ -170,7 +175,7 @@ public class HostListingControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void delete_ReturnsOk() throws Exception {
         Long listingId = RandomUtils.nextLong();
         when(listingRepository.existsById(listingId)).thenReturn(true);
@@ -190,7 +195,7 @@ public class HostListingControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = {"HOST"})
+    @WithMockUser(roles = {ROLE_HOST})
     void getAll() throws Exception {
         Long userId = RandomUtils.nextLong();
         when(userService.getCurrent()).thenReturn(
@@ -212,12 +217,14 @@ public class HostListingControllerTest {
                 .andExpect(status().isUnauthorized());
     }
 
-    private void testCreateRequestDtoValidation(Consumer<ListingCreateRequestDTO> dtoModifier, ResultMatcher resultMatcher) throws Exception {
+    private void testCreateRequestDtoValidation(Consumer<ListingCreateRequestDTO> dtoModifier,
+                                                ResultMatcher resultMatcher) throws Exception {
         ListingCreateRequestDTO dto = createCorrectListingCreateRequestDTO();
         dtoModifier.accept(dto);
         String requestJson = objectMapper.writeValueAsString(dto);
         List<String> list = new ArrayList<>(dto.getAmenities());
-        List<Amenity> listAmenity = list.stream().map(a -> Amenity.builder().id(RandomUtils.nextLong()).code(a).build()).toList();
+        List<Amenity> listAmenity = list.stream()
+                .map(a -> Amenity.builder().id(RandomUtils.nextLong()).code(a).build()).toList();
         when(amenityRepository.getAllByCodeIn(dto.getAmenities()))
                 .thenReturn(listAmenity);
         mockMvc.perform(post(HOST_LISTING_URI_PREFIX)
