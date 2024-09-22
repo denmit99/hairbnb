@@ -6,6 +6,7 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.method.annotation.HandlerMethodValidationException;
 
 @ControllerAdvice
 public class CustomExceptionHandler {
@@ -22,6 +23,14 @@ public class CustomExceptionHandler {
                 .map(e -> e.getField() + ": " + e.getDefaultMessage())
                 .toList().toString();
         ErrorMessage error = new ErrorMessage("invalid.request", errors);
+        return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
+    }
+
+    //TODO add functionality to use custom http code in constraint validation annotations (e.g. @ListingIdExists)
+    @ExceptionHandler(value = {HandlerMethodValidationException.class})
+    public ResponseEntity<Object> methodValidationException(HandlerMethodValidationException ex) {
+        var msg = ex.getAllValidationResults().getFirst().getResolvableErrors().getFirst().getDefaultMessage();
+        ErrorMessage error = new ErrorMessage("invalid.request", msg);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 

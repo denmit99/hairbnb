@@ -9,11 +9,23 @@ import org.springframework.stereotype.Component;
 @Component
 public class ListingIdExistsValidator implements ConstraintValidator<ListingIdExists, Long> {
 
+    private static final String MESSAGE = "Listing with id %d does not exist";
+
     @Autowired
     private ListingRepository listingRepository;
 
     @Override
     public boolean isValid(Long listingId, ConstraintValidatorContext context) {
-        return listingRepository.existsById(listingId);
+        if (listingId == null) {
+            return true;
+        }
+        if (!listingRepository.existsById(listingId)) {
+            context.disableDefaultConstraintViolation();
+            context.buildConstraintViolationWithTemplate(
+                            String.format(MESSAGE, listingId))
+                    .addConstraintViolation();
+            return false;
+        }
+        return true;
     }
 }

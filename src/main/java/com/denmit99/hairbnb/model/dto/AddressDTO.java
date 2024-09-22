@@ -4,9 +4,9 @@ import com.denmit99.hairbnb.constants.Constants;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Getter;
+import lombok.Data;
 
-@Getter
+@Data
 public class AddressDTO {
     @NotBlank
     @Size(max = Constants.LISTING_MAX_ADDRESS_LENGTH)
