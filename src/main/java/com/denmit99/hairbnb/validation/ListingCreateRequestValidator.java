@@ -8,7 +8,8 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 
 @Component
-public class ListingCreateRequestValidator implements ConstraintValidator<ListingCreateRequest, ListingCreateRequestDTO> {
+public class ListingCreateRequestValidator
+        implements ConstraintValidator<ListingCreateRequest, ListingCreateRequestDTO> {
     @Override
     public boolean isValid(ListingCreateRequestDTO listingCreateRequestDTO,
                            ConstraintValidatorContext constraintValidatorContext) {
