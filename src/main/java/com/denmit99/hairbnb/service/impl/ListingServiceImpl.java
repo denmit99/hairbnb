@@ -10,7 +10,9 @@ import com.denmit99.hairbnb.model.dto.AddressDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.entity.Listing;
 import com.denmit99.hairbnb.repository.ListingRepository;
+import com.denmit99.hairbnb.repository.specification.ListingSpecification;
 import com.denmit99.hairbnb.service.BedroomService;
+import com.denmit99.hairbnb.service.CurrencyConverter;
 import com.denmit99.hairbnb.service.ListingAmenityService;
 import com.denmit99.hairbnb.service.ListingService;
 import com.denmit99.hairbnb.service.UserService;
@@ -18,6 +20,7 @@ import com.denmit99.hairbnb.service.converter.ListingToListingBOConverter;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -49,6 +52,9 @@ public class ListingServiceImpl implements ListingService {
     @Autowired
     private ListingToListingBOConverter listingToListingBOConverter;
 
+    @Autowired
+    private CurrencyConverter currencyConverter;
+
     @Transactional
     @Override
     public ListingBO create(ListingCreateRequestDTO requestDTO) {
@@ -60,11 +66,16 @@ public class ListingServiceImpl implements ListingService {
                 .description(requestDTO.getDescription())
                 .address(convertAddressToString(requestDTO.getAddress()))
                 .pricePerNight(requestDTO.getPricePerNight())
+                .pricePerNightUsd(currencyConverter.convertToDefault(
+                        requestDTO.getPricePerNight(),
+                        requestDTO.getCurrency())
+                )
                 .currency(requestDTO.getCurrency())
                 .propertyType(requestDTO.getPropertyType())
                 .placeType(requestDTO.getPlaceType())
                 .maxNumberOfGuests(requestDTO.getMaxGuests())
                 .numberOfBathrooms(requestDTO.getNumberOfBathrooms())
+                .numberOfBedrooms(requestDTO.getBedrooms().size())
                 .creationDate(now)
                 .updateDate(now)
                 .build();
@@ -102,14 +113,23 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     public List<ListingLightBO> search(ListingSearchRequestBO requestBO) {
-        var res = listingRepository.search(
-                requestBO.getMinPrice(),
-                requestBO.getMaxPrice(),
-                requestBO.getPropertyTypes().stream().map(Enum::name).toList(),
-                requestBO.getPlaceTypes().stream().map(Enum::name).toList(),
-                requestBO.getNumberOfBathrooms(),
-                requestBO.getAmenities());
-        return res.stream().map(l -> conversionService.convert(l, ListingLightBO.class)).toList();
+        Double minPriceUsd = Optional.ofNullable(requestBO.getMinPrice())
+                .map(price -> currencyConverter.convertToDefault(price, requestBO.getCurrency()))
+                .orElse(null);
+        Double maxPriceUsd = Optional.ofNullable(requestBO.getMaxPrice())
+                .map(price -> currencyConverter.convertToDefault(price, requestBO.getCurrency()))
+                .orElse(null);
+        Specification<Listing> specification = Specification
+                .where(ListingSpecification.hasAmenities(requestBO.getAmenities()))
+                .and(ListingSpecification.hasPriceBetween(minPriceUsd, maxPriceUsd))
+                .and(ListingSpecification.availableForNumberOfGuests(requestBO.getNumberOfGuests()))
+                .and(ListingSpecification.hasBathrooms(requestBO.getNumberOfBathrooms()))
+                .and(ListingSpecification.hasPropertyType(requestBO.getPropertyTypes()))
+                .and(ListingSpecification.hasPlaceType(requestBO.getPlaceTypes()))
+                .and(ListingSpecification.hasBedrooms(requestBO.getNumberOfBedrooms()));
+        return listingRepository.findAll(specification).stream()
+                .map(l -> conversionService.convert(l, ListingLightBO.class))
+                .toList();
     }
 
     @Override

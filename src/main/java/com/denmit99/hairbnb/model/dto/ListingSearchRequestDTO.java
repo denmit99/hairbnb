@@ -1,9 +1,10 @@
 package com.denmit99.hairbnb.model.dto;
 
 import com.denmit99.hairbnb.constants.Constants;
+import com.denmit99.hairbnb.model.AmenityType;
+import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
-import com.denmit99.hairbnb.validation.AmenityCodesExist;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
@@ -20,6 +21,8 @@ public class ListingSearchRequestDTO {
     @Max(Integer.MAX_VALUE)
     private Long maxPrice;
 
+    private Currency currency;
+
     private List<PropertyType> propertyTypes;
 
     private List<PlaceType> placeTypes;
@@ -29,14 +32,13 @@ public class ListingSearchRequestDTO {
     private Integer numberOfBedrooms;
 
     @Min(0)
-    @Max(Constants.LISTING_MAX_BEDS)
-    private Integer numberOfBeds;
+    @Max(Constants.LISTING_MAX_MAX_GUESTS)
+    private Integer numberOfGuests;
 
     @Min(0)
     @Max(Constants.LISTING_MAX_BATHROOMS)
     private Integer numberOfBathrooms;
 
-    @AmenityCodesExist
-    private Set<String> amenities;
+    private Set<AmenityType> amenities;
 
 }

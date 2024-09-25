@@ -1,10 +1,10 @@
 package com.denmit99.hairbnb.model.dto;
 
 import com.denmit99.hairbnb.constants.Constants;
+import com.denmit99.hairbnb.model.AmenityType;
 import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
-import com.denmit99.hairbnb.validation.AmenityCodesExist;
 import com.denmit99.hairbnb.validation.ListingCreateRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Max;
@@ -61,7 +61,6 @@ public class ListingCreateRequestDTO {
     @Max(Constants.LISTING_MAX_BATHROOMS)
     private Integer numberOfBathrooms;
 
-    @AmenityCodesExist
-    private Set<String> amenities;
+    private Set<AmenityType> amenities;
 
 }

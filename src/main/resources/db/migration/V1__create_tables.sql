@@ -26,10 +26,12 @@ CREATE TABLE IF NOT EXISTS public.listing (
     address TEXT NOT NULL,
     price INT NOT NULL,
     currency TEXT NOT NULL,
+    price_usd DOUBLE PRECISION NOT NULL,
     property_type TEXT NOT NULL,
     place_type TEXT NOT NULL,
     max_guests INT NOT NULL,
     num_of_bathrooms INT NOT NULL,
+    num_of_bedrooms INT NOT NULL,
     creation_date timestamptz NOT NULL,
     update_date timestamptz NOT NULL
 );
@@ -44,44 +46,8 @@ CREATE TABLE IF NOT EXISTS public.bedroom (
     sofa_beds_number INT NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS public.amenity_category (
-    id SERIAL PRIMARY KEY,
-    code TEXT NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS public.amenity (
-    id SERIAL PRIMARY KEY,
-    category_id BIGINT NOT NULL REFERENCES public.amenity_category(id),
-    code TEXT NOT NULL UNIQUE
-);
-
 CREATE TABLE IF NOT EXISTS public.listing_amenity (
     id SERIAL PRIMARY KEY,
     listing_id BIGINT NOT NULL REFERENCES public.listing(id),
-    amenity_id BIGINT NOT NULL REFERENCES public.amenity(id)
+    amenity_code TEXT NOT NULL
 );
-
-INSERT INTO public.amenity_category(id, code) VALUES
-(1, 'DEFAULT'),
-(2, 'SAFETY');
-
-INSERT INTO public.amenity(category_id, code) VALUES
-(1, 'WI_FI'),
-(1, 'WASHING_MACHINE'),
-(1, 'AIR_CONDITIONING'),
-(1, 'TV'),
-(1, 'HAIR_DRYER'),
-(1, 'IRON'),
-(1, 'ESSENTIALS'),
-(1, 'COOKING_BASICS'),
-(1, 'WORKSPACE'),
-(1, 'HEATING'),
-(1, 'KITCHEN'),
-(1, 'PARKING'),
-(1, 'POOL'),
-(1, 'FIREPLACE'),
-(2, 'SMOKE_DETECTOR'),
-(2, 'FIRST_AID_KIT'),
-(2, 'FIRE_EXTINGUISHER');
-
-CREATE INDEX IF NOT EXISTS amenity_code_index ON public.amenity(code);

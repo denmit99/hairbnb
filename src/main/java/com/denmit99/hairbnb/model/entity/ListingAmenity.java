@@ -1,7 +1,10 @@
 package com.denmit99.hairbnb.model.entity;
 
+import com.denmit99.hairbnb.model.AmenityType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
@@ -26,6 +29,7 @@ public class ListingAmenity {
     @Column(name = "listing_id")
     private Long listingId;
 
-    @Column(name = "amenity_id")
-    private Long amenityId;
+    @Column(name = "amenity_code")
+    @Enumerated(EnumType.STRING)
+    private AmenityType amenityCode;
 }

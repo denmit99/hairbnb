@@ -10,6 +10,7 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,6 +18,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.ZonedDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "listing")
@@ -49,6 +51,9 @@ public class Listing {
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
+    @Column(name = "price_usd")
+    private double pricePerNightUsd;
+
     @Column(name = "property_type")
     @Enumerated(EnumType.STRING)
     private PropertyType propertyType;
@@ -63,10 +68,16 @@ public class Listing {
     @Column(name = "num_of_bathrooms")
     private Integer numberOfBathrooms;
 
+    @Column(name = "num_of_bedrooms")
+    private Integer numberOfBedrooms;
+
     @Column(name = "creation_date")
     private ZonedDateTime creationDate;
 
     @Column(name = "update_date")
     private ZonedDateTime updateDate;
+
+    @OneToMany(mappedBy = "listingId")
+    private List<ListingAmenity> amenities;
 
 }

@@ -13,11 +13,12 @@ public class ListingSearchRequestDTOToBOConverter
         return ListingSearchRequestBO.builder()
                 .minPrice(source.getMinPrice())
                 .maxPrice(source.getMaxPrice())
+                .currency(source.getCurrency())
                 .propertyTypes(source.getPropertyTypes())
                 .placeTypes(source.getPlaceTypes())
                 .amenities(source.getAmenities())
                 .numberOfBedrooms(source.getNumberOfBedrooms())
-                .numberOfBeds(source.getNumberOfBeds())
+                .numberOfGuests(source.getNumberOfGuests())
                 .numberOfBathrooms(source.getNumberOfBathrooms())
                 .build();
     }

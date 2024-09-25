@@ -38,6 +38,8 @@ public class ListingBO {
 
     private Integer numberOfBathrooms;
 
+    private Integer numberOfBedrooms;
+
     private List<BedroomBO> bedrooms;
 
     private Set<String> amenities;

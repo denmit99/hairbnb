@@ -28,6 +28,7 @@ public class ListingToListingBOConverter  {
                 .placeType(listing.getPlaceType())
                 .maxGuests(listing.getMaxNumberOfGuests())
                 .numberOfBathrooms(listing.getNumberOfBathrooms())
+                .numberOfBedrooms(listing.getNumberOfBedrooms())
                 .bedrooms(bedrooms)
                 .amenities(listingAmenityService.getByListing(listing.getId()))
                 .build();

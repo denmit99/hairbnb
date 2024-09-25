@@ -30,9 +30,8 @@ public class ListingController {
 
     @PostMapping
     public List<ListingLightDTO> search(@Valid @RequestBody ListingSearchRequestDTO requestDTO) {
-        //TODO search listings by filters
-        var res = listingService.search(conversionService.convert(requestDTO, ListingSearchRequestBO.class));
-        return res.stream()
+        return listingService.search(conversionService.convert(requestDTO, ListingSearchRequestBO.class))
+                .stream()
                 .map(l -> conversionService.convert(l, ListingLightDTO.class))
                 .toList();
     }

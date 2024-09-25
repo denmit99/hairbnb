@@ -1,5 +1,7 @@
 package com.denmit99.hairbnb.model.bo;
 
+import com.denmit99.hairbnb.model.AmenityType;
+import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
 import lombok.Builder;
@@ -16,15 +18,17 @@ public class ListingSearchRequestBO {
 
     private Long maxPrice;
 
+    private Currency currency;
+
     private List<PropertyType> propertyTypes;
 
     private List<PlaceType> placeTypes;
 
     private Integer numberOfBedrooms;
 
-    private Integer numberOfBeds;
+    private Integer numberOfGuests;
 
     private Integer numberOfBathrooms;
 
-    private Set<String> amenities;
+    private Set<AmenityType> amenities;
 }
