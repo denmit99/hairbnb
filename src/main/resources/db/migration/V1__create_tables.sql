@@ -24,7 +24,7 @@ CREATE TABLE IF NOT EXISTS public.listing (
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     address TEXT NOT NULL,
-    price INT NOT NULL,
+    price DOUBLE PRECISION NOT NULL,
     currency TEXT NOT NULL,
     price_usd DOUBLE PRECISION NOT NULL,
     property_type TEXT NOT NULL,

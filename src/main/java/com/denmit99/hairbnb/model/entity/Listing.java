@@ -45,14 +45,14 @@ public class Listing {
     private String address;
 
     @Column(name = "price")
-    private Integer pricePerNight;
+    private Double pricePerNight;
 
     @Column(name = "currency")
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
     @Column(name = "price_usd")
-    private double pricePerNightUsd;
+    private Double pricePerNightUsd;
 
     @Column(name = "property_type")
     @Enumerated(EnumType.STRING)

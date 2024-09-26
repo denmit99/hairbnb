@@ -36,7 +36,7 @@ public class ListingCreateRequestDTO {
     @Min(1)
     @Max(Integer.MAX_VALUE)
     @NotNull
-    private Integer pricePerNight;
+    private Double pricePerNight;
 
     @NotNull
     private Currency currency;

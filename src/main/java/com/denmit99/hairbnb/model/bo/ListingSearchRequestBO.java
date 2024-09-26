@@ -31,4 +31,8 @@ public class ListingSearchRequestBO {
     private Integer numberOfBathrooms;
 
     private Set<AmenityType> amenities;
+
+    private Integer page;
+
+    private Integer pageSize;
 }

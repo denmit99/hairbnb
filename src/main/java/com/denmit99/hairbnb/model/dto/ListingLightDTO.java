@@ -21,7 +21,7 @@ public class ListingLightDTO {
 
     private String address;
 
-    private Integer pricePerNight;
+    private Double pricePerNight;
 
     private Currency currency;
 

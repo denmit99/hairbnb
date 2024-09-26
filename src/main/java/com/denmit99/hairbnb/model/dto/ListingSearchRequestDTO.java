@@ -14,7 +14,7 @@ import java.util.Set;
 
 //TODO add validation annotations for all fields
 @Data
-public class ListingSearchRequestDTO {
+public class ListingSearchRequestDTO extends PaginationRequest {
     @Min(1)
     private Long minPrice;
 

@@ -20,6 +20,8 @@ public class ListingSearchRequestDTOToBOConverter
                 .numberOfBedrooms(source.getNumberOfBedrooms())
                 .numberOfGuests(source.getNumberOfGuests())
                 .numberOfBathrooms(source.getNumberOfBathrooms())
+                .page(source.getPage())
+                .pageSize(source.getPageSize())
                 .build();
     }
 }

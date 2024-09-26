@@ -20,6 +20,7 @@ import com.denmit99.hairbnb.service.converter.ListingToListingBOConverter;
 import org.apache.logging.log4j.util.Strings;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -127,7 +128,18 @@ public class ListingServiceImpl implements ListingService {
                 .and(ListingSpecification.hasPropertyType(requestBO.getPropertyTypes()))
                 .and(ListingSpecification.hasPlaceType(requestBO.getPlaceTypes()))
                 .and(ListingSpecification.hasBedrooms(requestBO.getNumberOfBedrooms()));
-        return listingRepository.findAll(specification).stream()
+        //TODO REWRITE IT response must contain price in a currency in request
+        var res = listingRepository.findAll(specification,
+                PageRequest.of(requestBO.getPage(), requestBO.getPageSize()));
+        var resInUserCurrency = res.stream()
+                .peek(l -> {
+                    var priceConverted = currencyConverter.convertFromDefault(l.getPricePerNightUsd(), requestBO.getCurrency());
+                    var priceRounded = Math.round(priceConverted * 100.0) / 100.0;
+                    l.setPricePerNight(priceRounded);
+                    l.setCurrency(requestBO.getCurrency());
+                })
+                .toList();
+        return resInUserCurrency.stream()
                 .map(l -> conversionService.convert(l, ListingLightBO.class))
                 .toList();
     }
