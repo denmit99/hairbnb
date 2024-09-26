@@ -23,6 +23,8 @@ public class ListingLightBO {
 
     private Double pricePerNight;
 
+    private Double pricePerNightUsd;
+
     private Currency currency;
 
     private PropertyType propertyType;

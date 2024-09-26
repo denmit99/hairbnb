@@ -8,12 +8,14 @@ import com.denmit99.hairbnb.model.PropertyType;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 import java.util.List;
 import java.util.Set;
 
 //TODO add validation annotations for all fields
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class ListingSearchRequestDTO extends PaginationRequest {
     @Min(1)
     private Long minPrice;

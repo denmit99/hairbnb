@@ -1,6 +1,7 @@
 package com.denmit99.hairbnb.service.impl;
 
 import com.denmit99.hairbnb.exception.NotFoundException;
+import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.bo.BedroomBO;
 import com.denmit99.hairbnb.model.bo.ListingBO;
 import com.denmit99.hairbnb.model.bo.ListingLightBO;
@@ -128,19 +129,14 @@ public class ListingServiceImpl implements ListingService {
                 .and(ListingSpecification.hasPropertyType(requestBO.getPropertyTypes()))
                 .and(ListingSpecification.hasPlaceType(requestBO.getPlaceTypes()))
                 .and(ListingSpecification.hasBedrooms(requestBO.getNumberOfBedrooms()));
-        //TODO REWRITE IT response must contain price in a currency in request
-        var res = listingRepository.findAll(specification,
-                PageRequest.of(requestBO.getPage(), requestBO.getPageSize()));
-        var resInUserCurrency = res.stream()
-                .peek(l -> {
-                    var priceConverted = currencyConverter.convertFromDefault(l.getPricePerNightUsd(), requestBO.getCurrency());
-                    var priceRounded = Math.round(priceConverted * 100.0) / 100.0;
-                    l.setPricePerNight(priceRounded);
-                    l.setCurrency(requestBO.getCurrency());
+        return listingRepository
+                .findAll(specification, PageRequest.of(requestBO.getPage(), requestBO.getPageSize()))
+                .stream()
+                .map(l -> {
+                    ListingLightBO listingBO = conversionService.convert(l, ListingLightBO.class);
+                    convertPriceToUsersCurrency(requestBO.getCurrency(), listingBO);
+                    return listingBO;
                 })
-                .toList();
-        return resInUserCurrency.stream()
-                .map(l -> conversionService.convert(l, ListingLightBO.class))
                 .toList();
     }
 
@@ -150,6 +146,13 @@ public class ListingServiceImpl implements ListingService {
         return listings.stream()
                 .map(l -> conversionService.convert(l, ListingLightBO.class))
                 .toList();
+    }
+
+    private void convertPriceToUsersCurrency(Currency currency, ListingLightBO listingBO) {
+        var priceConverted = currencyConverter.convertFromDefault(listingBO.getPricePerNightUsd(), currency);
+        var priceRounded = Math.round(priceConverted * 100.0) / 100.0;
+        listingBO.setPricePerNight(priceRounded);
+        listingBO.setCurrency(currency);
     }
 
     private String convertAddressToString(AddressDTO addressDTO) {

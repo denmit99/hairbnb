@@ -3,17 +3,13 @@ package com.denmit99.hairbnb.service.converter;
 import com.denmit99.hairbnb.model.bo.BedroomBO;
 import com.denmit99.hairbnb.model.bo.ListingBO;
 import com.denmit99.hairbnb.model.entity.Listing;
-import com.denmit99.hairbnb.service.ListingAmenityService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Component
-public class ListingToListingBOConverter  {
-
-    @Autowired
-    private ListingAmenityService listingAmenityService;
+public class ListingToListingBOConverter {
 
     public ListingBO convert(Listing listing, List<BedroomBO> bedrooms) {
         return ListingBO.builder()
@@ -23,6 +19,7 @@ public class ListingToListingBOConverter  {
                 .description(listing.getDescription())
                 .address(listing.getAddress())
                 .pricePerNight(listing.getPricePerNight())
+                .pricePerNightUsd(listing.getPricePerNightUsd())
                 .currency(listing.getCurrency())
                 .propertyType(listing.getPropertyType())
                 .placeType(listing.getPlaceType())
@@ -30,7 +27,10 @@ public class ListingToListingBOConverter  {
                 .numberOfBathrooms(listing.getNumberOfBathrooms())
                 .numberOfBedrooms(listing.getNumberOfBedrooms())
                 .bedrooms(bedrooms)
-                .amenities(listingAmenityService.getByListing(listing.getId()))
+                .amenities(listing.getAmenities()
+                        .stream().map(a -> a.getAmenityCode().name())
+                        .collect(Collectors.toSet())
+                )
                 .build();
     }
 }
