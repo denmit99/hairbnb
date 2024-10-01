@@ -12,7 +12,11 @@ import org.springframework.data.jpa.domain.Specification;
 import java.util.List;
 import java.util.Set;
 
-public class ListingSpecification {
+public final class ListingSpecification {
+
+    private ListingSpecification() {
+    }
+
     public static Specification<Listing> hasAmenities(Set<AmenityType> amenities) {
         return (root, query, builder) -> {
             if (amenities == null || amenities.isEmpty()) {

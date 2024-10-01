@@ -1,5 +1,6 @@
 package com.denmit99.hairbnb.exception;
 
+import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
@@ -19,10 +20,13 @@ public class CustomExceptionHandler {
 
     @ExceptionHandler(value = {MethodArgumentNotValidException.class})
     public ResponseEntity<Object> validationException(MethodArgumentNotValidException ex) {
-        var errors = ex.getBindingResult().getFieldErrors().stream()
+        var fieldErrors = ex.getBindingResult().getFieldErrors().stream()
                 .map(e -> e.getField() + ": " + e.getDefaultMessage())
                 .toList().toString();
-        ErrorMessage error = new ErrorMessage("invalid.request", errors);
+        var allErrors = ex.getBindingResult().getAllErrors().stream()
+                .map(DefaultMessageSourceResolvable::getDefaultMessage)
+                .toList().toString();
+        ErrorMessage error = new ErrorMessage("invalid.request", String.join(",", fieldErrors, allErrors));
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }
 

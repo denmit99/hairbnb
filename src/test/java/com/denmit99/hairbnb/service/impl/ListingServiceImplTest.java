@@ -1,15 +1,24 @@
 package com.denmit99.hairbnb.service.impl;
 
 import com.denmit99.hairbnb.exception.NotFoundException;
+import com.denmit99.hairbnb.model.AmenityType;
+import com.denmit99.hairbnb.model.Currency;
+import com.denmit99.hairbnb.model.PlaceType;
+import com.denmit99.hairbnb.model.PropertyType;
 import com.denmit99.hairbnb.model.bo.BedroomBO;
 import com.denmit99.hairbnb.model.bo.UserBO;
+import com.denmit99.hairbnb.model.dto.AddressDTO;
+import com.denmit99.hairbnb.model.dto.BedroomDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.entity.Listing;
 import com.denmit99.hairbnb.repository.ListingRepository;
 import com.denmit99.hairbnb.service.BedroomService;
+import com.denmit99.hairbnb.service.CurrencyConverter;
 import com.denmit99.hairbnb.service.ListingAmenityService;
 import com.denmit99.hairbnb.service.UserService;
 import com.denmit99.hairbnb.service.converter.ListingToListingBOConverter;
+import com.denmit99.hairbnb.util.RandomEnumUtils;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -17,11 +26,11 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.core.convert.ConversionService;
 import org.springframework.security.access.AccessDeniedException;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -45,7 +54,7 @@ public class ListingServiceImplTest {
     private UserService userService;
 
     @Mock
-    private ConversionService conversionService;
+    private CurrencyConverter currencyConverter;
 
     @Mock
     private ListingToListingBOConverter listingToListingBOConverter;
@@ -60,7 +69,7 @@ public class ListingServiceImplTest {
         Listing listingEntity = new Listing();
         Mockito.when(listingRepository.save(any()))
                 .thenReturn(listingEntity);
-        ListingCreateRequestDTO requestDTO = new ListingCreateRequestDTO();
+        ListingCreateRequestDTO requestDTO = createRequestDTO();
 
         service.create(requestDTO);
 
@@ -140,5 +149,29 @@ public class ListingServiceImplTest {
         Listing listing = new Listing();
         listing.setUserId(userId);
         return listing;
+    }
+
+    private ListingCreateRequestDTO createRequestDTO() {
+        return ListingCreateRequestDTO.builder()
+                .title(RandomStringUtils.randomAlphabetic(5))
+                .description(RandomStringUtils.randomAlphanumeric(10))
+                .address(AddressDTO.builder()
+                        .street(RandomStringUtils.randomAlphanumeric(5))
+                        .city(RandomStringUtils.randomAlphabetic(5))
+                        .country(RandomStringUtils.randomAlphabetic(5))
+                        .zipCode(RandomStringUtils.randomNumeric(5))
+                        .build())
+                .maxGuests(1)
+                .currency(RandomEnumUtils.nextValue(Currency.class))
+                .propertyType(RandomEnumUtils.nextValue(PropertyType.class))
+                .placeType(RandomEnumUtils.nextValue(PlaceType.class))
+                .numberOfBathrooms(RandomUtils.nextInt())
+                .amenities(Set.of(
+                        RandomEnumUtils.nextValue(AmenityType.class),
+                        RandomEnumUtils.nextValue(AmenityType.class)
+                ))
+                .pricePerNight(RandomUtils.nextDouble())
+                .bedrooms(List.of(BedroomDTO.builder().singleNum(1).build()))
+                .build();
     }
 }

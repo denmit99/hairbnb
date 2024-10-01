@@ -36,6 +36,8 @@ import java.util.stream.Stream;
 @Service
 public class ListingServiceImpl implements ListingService {
 
+    private static final double HUNDRED = 100.0;
+
     @Autowired
     private ListingRepository listingRepository;
 
@@ -150,7 +152,7 @@ public class ListingServiceImpl implements ListingService {
 
     private void convertPriceToUsersCurrency(Currency currency, ListingLightBO listingBO) {
         var priceConverted = currencyConverter.convertFromDefault(listingBO.getPricePerNightUsd(), currency);
-        var priceRounded = Math.round(priceConverted * 100.0) / 100.0;
+        var priceRounded = Math.round(priceConverted * HUNDRED) / HUNDRED;
         listingBO.setPricePerNight(priceRounded);
         listingBO.setCurrency(currency);
     }

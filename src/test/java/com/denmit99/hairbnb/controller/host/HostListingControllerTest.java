@@ -1,5 +1,6 @@
 package com.denmit99.hairbnb.controller.host;
 
+import com.denmit99.hairbnb.model.AmenityType;
 import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
@@ -7,8 +8,6 @@ import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.dto.AddressDTO;
 import com.denmit99.hairbnb.model.dto.BedroomDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
-import com.denmit99.hairbnb.model.entity.Amenity;
-import com.denmit99.hairbnb.repository.AmenityRepository;
 import com.denmit99.hairbnb.repository.ListingRepository;
 import com.denmit99.hairbnb.service.JwtService;
 import com.denmit99.hairbnb.service.ListingService;
@@ -29,7 +28,6 @@ import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Consumer;
@@ -72,9 +70,6 @@ public class HostListingControllerTest {
 
     @MockBean
     private ListingRepository listingRepository;
-
-    @MockBean
-    private AmenityRepository amenityRepository;
 
     @Test
     @WithMockUser(roles = {ROLE_HOST})
@@ -145,7 +140,7 @@ public class HostListingControllerTest {
     @Test
     @WithMockUser(roles = {ROLE_HOST})
     void create_PricePerNightTooLow_Returns400() throws Exception {
-        testCreateRequestDtoValidation(dto -> dto.setPricePerNight(0), status().isBadRequest());
+        testCreateRequestDtoValidation(dto -> dto.setPricePerNight(0.0), status().isBadRequest());
     }
 
     @Test
@@ -222,11 +217,6 @@ public class HostListingControllerTest {
         ListingCreateRequestDTO dto = createCorrectListingCreateRequestDTO();
         dtoModifier.accept(dto);
         String requestJson = objectMapper.writeValueAsString(dto);
-        List<String> list = new ArrayList<>(dto.getAmenities());
-        List<Amenity> listAmenity = list.stream()
-                .map(a -> Amenity.builder().id(RandomUtils.nextLong()).code(a).build()).toList();
-        when(amenityRepository.getAllByCodeIn(dto.getAmenities()))
-                .thenReturn(listAmenity);
         mockMvc.perform(post(HOST_LISTING_URI_PREFIX)
                         .with(csrf())
                         .content(requestJson)
@@ -244,7 +234,7 @@ public class HostListingControllerTest {
         addressDTO.setCity(RandomStringUtils.randomAlphanumeric(10));
         addressDTO.setZipCode(RandomStringUtils.randomNumeric(5));
         dto.setAddress(addressDTO);
-        dto.setPricePerNight(20);
+        dto.setPricePerNight(20.0);
         dto.setCurrency(Currency.EUR);
         dto.setPropertyType(PropertyType.APARTMENT);
         dto.setPlaceType(PlaceType.ENTIRE_PLACE);
@@ -259,10 +249,7 @@ public class HostListingControllerTest {
                         .build())
         );
         dto.setNumberOfBathrooms(2);
-        dto.setAmenities(Set.of(
-                RandomStringUtils.randomAlphabetic(5),
-                RandomStringUtils.randomAlphabetic(5))
-        );
+        dto.setAmenities(Set.of(AmenityType.WI_FI, AmenityType.ESSENTIALS));
         return dto;
     }
 }
