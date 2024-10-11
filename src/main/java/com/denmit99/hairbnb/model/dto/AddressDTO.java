@@ -26,6 +26,7 @@ public class AddressDTO {
     @Size(max = Constants.LISTING_MAX_ADDRESS_LENGTH)
     private String city;
 
+    @NotBlank
     @Pattern(regexp = "\\d+")
     @Size(max = Constants.LISTING_MAX_ZIPCODE_LENGTH)
     private String zipCode;

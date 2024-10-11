@@ -1,5 +1,6 @@
 package com.denmit99.hairbnb.model.bo;
 
+import com.denmit99.hairbnb.model.AmenityType;
 import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
@@ -44,5 +45,5 @@ public class ListingBO {
 
     private List<BedroomBO> bedrooms;
 
-    private Set<String> amenities;
+    private Set<AmenityType> amenities;
 }

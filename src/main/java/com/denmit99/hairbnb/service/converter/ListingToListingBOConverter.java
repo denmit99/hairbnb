@@ -1,17 +1,18 @@
 package com.denmit99.hairbnb.service.converter;
 
+import com.denmit99.hairbnb.model.AmenityType;
 import com.denmit99.hairbnb.model.bo.BedroomBO;
 import com.denmit99.hairbnb.model.bo.ListingBO;
 import com.denmit99.hairbnb.model.entity.Listing;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Set;
 
 @Component
 public class ListingToListingBOConverter {
 
-    public ListingBO convert(Listing listing, List<BedroomBO> bedrooms) {
+    public ListingBO convert(Listing listing, List<BedroomBO> bedrooms, Set<AmenityType> amenities) {
         return ListingBO.builder()
                 .id(listing.getId())
                 .userId(listing.getUserId())
@@ -27,10 +28,7 @@ public class ListingToListingBOConverter {
                 .numberOfBathrooms(listing.getNumberOfBathrooms())
                 .numberOfBedrooms(listing.getNumberOfBedrooms())
                 .bedrooms(bedrooms)
-                .amenities(listing.getAmenities()
-                        .stream().map(a -> a.getAmenityCode().name())
-                        .collect(Collectors.toSet())
-                )
+                .amenities(amenities)
                 .build();
     }
 }

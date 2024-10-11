@@ -6,11 +6,13 @@ import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
 import com.denmit99.hairbnb.model.bo.BedroomBO;
+import com.denmit99.hairbnb.model.bo.ListingSearchRequestBO;
 import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.dto.AddressDTO;
 import com.denmit99.hairbnb.model.dto.BedroomDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.entity.Listing;
+import com.denmit99.hairbnb.model.entity.ListingAmenity;
 import com.denmit99.hairbnb.repository.ListingRepository;
 import com.denmit99.hairbnb.service.BedroomService;
 import com.denmit99.hairbnb.service.CurrencyConverter;
@@ -26,6 +28,9 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.access.AccessDeniedException;
 
 import java.util.List;
@@ -34,6 +39,7 @@ import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -77,7 +83,7 @@ public class ListingServiceImplTest {
         verify(listingRepository).save(any());
         verify(bedroomService).save(any(), any());
         verify(listingAmenityService).save(any(), any());
-        verify(listingToListingBOConverter).convert(eq(listingEntity), any());
+        verify(listingToListingBOConverter).convert(eq(listingEntity), any(), any());
     }
 
     @Test
@@ -126,6 +132,8 @@ public class ListingServiceImplTest {
     public void get() {
         Long listingId = RandomUtils.nextLong();
         Listing listing = new Listing();
+        AmenityType amenity = RandomEnumUtils.nextValue(AmenityType.class);
+        listing.setAmenities(List.of(ListingAmenity.builder().amenityCode(amenity).build()));
         List<BedroomBO> bedrooms = List.of(new BedroomBO());
         when(listingRepository.findById(listingId))
                 .thenReturn(Optional.of(listing));
@@ -134,7 +142,7 @@ public class ListingServiceImplTest {
 
         service.get(listingId);
 
-        verify(listingToListingBOConverter).convert(listing, bedrooms);
+        verify(listingToListingBOConverter).convert(listing, bedrooms, Set.of(amenity));
     }
 
     @Test
@@ -143,6 +151,21 @@ public class ListingServiceImplTest {
         when(listingRepository.findById(listingId)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> service.get(listingId));
+    }
+
+    @Test
+    public void search() {
+        ListingSearchRequestBO requestBO = ListingSearchRequestBO.builder()
+                .maxPrice(RandomUtils.nextLong())
+                .minPrice(RandomUtils.nextLong())
+                .currency(Currency.EUR)
+                .page(0)
+                .pageSize(10)
+                .build();
+        when(currencyConverter.convertToDefault(anyDouble(), any())).thenReturn(RandomUtils.nextDouble());
+        when(listingRepository.findAll(any(Specification.class), any(Pageable.class))).thenReturn(Page.empty());
+        service.search(requestBO);
+        verify(listingRepository).findAll(any(Specification.class), any(Pageable.class));
     }
 
     private Listing createListing(Long userId) {

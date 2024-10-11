@@ -10,6 +10,7 @@ import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.dto.AddressDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.entity.Listing;
+import com.denmit99.hairbnb.model.entity.ListingAmenity;
 import com.denmit99.hairbnb.repository.ListingRepository;
 import com.denmit99.hairbnb.repository.specification.ListingSpecification;
 import com.denmit99.hairbnb.service.BedroomService;
@@ -31,6 +32,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 @Service
@@ -86,7 +88,7 @@ public class ListingServiceImpl implements ListingService {
         Listing res = listingRepository.save(listing);
         List<BedroomBO> bedroomsBO = bedroomService.save(res.getId(), requestDTO.getBedrooms());
         listingAmenityService.save(res.getId(), requestDTO.getAmenities());
-        return listingToListingBOConverter.convert(res, bedroomsBO);
+        return listingToListingBOConverter.convert(res, bedroomsBO, requestDTO.getAmenities());
     }
 
     @Override
@@ -112,7 +114,9 @@ public class ListingServiceImpl implements ListingService {
             throw new NotFoundException(String.format("Listing with id %s is not found", listingId));
         }
         List<BedroomBO> bedrooms = bedroomService.getByListingId(listingId);
-        return listingToListingBOConverter.convert(res.get(), bedrooms);
+        var amenities = res.get().getAmenities()
+                .stream().map(ListingAmenity::getAmenityCode).collect(Collectors.toSet());
+        return listingToListingBOConverter.convert(res.get(), bedrooms, amenities);
     }
 
     @Override
