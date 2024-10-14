@@ -11,13 +11,14 @@ import com.denmit99.hairbnb.service.JwtService;
 import com.denmit99.hairbnb.service.TokenInfoService;
 import com.denmit99.hairbnb.service.UserService;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.convert.ConversionService;
+
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
@@ -78,7 +79,7 @@ public class AuthenticationServiceImplTest {
         LoginRequestDTO requestDTO = new LoginRequestDTO();
         requestDTO.setEmail(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
         UserBO userBO = new UserBO();
-        userBO.setId(RandomUtils.nextLong());
+        userBO.setId(UUID.randomUUID());
         when(userService.findByEmail(requestDTO.getEmail()))
                 .thenReturn(userBO);
         UserToken userToken = new UserToken();

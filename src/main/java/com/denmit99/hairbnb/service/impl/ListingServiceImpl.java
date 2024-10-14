@@ -32,6 +32,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
+import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -93,7 +94,7 @@ public class ListingServiceImpl implements ListingService {
 
     @Override
     @Transactional
-    public void delete(Long listingId) {
+    public void delete(UUID listingId) {
         UserBO currentUser = userService.getCurrent();
         Optional<Listing> listing = listingRepository.findById(listingId);
         if (listing.isEmpty()) {
@@ -108,7 +109,7 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public ListingBO get(Long listingId) {
+    public ListingBO get(UUID listingId) {
         Optional<Listing> res = listingRepository.findById(listingId);
         if (res.isEmpty()) {
             throw new NotFoundException(String.format("Listing with id %s is not found", listingId));
@@ -147,7 +148,7 @@ public class ListingServiceImpl implements ListingService {
     }
 
     @Override
-    public List<ListingLightBO> getAllByUserId(Long userId) {
+    public List<ListingLightBO> getAllByUserId(UUID userId) {
         var listings = listingRepository.findAllByUserId(userId);
         return listings.stream()
                 .map(l -> conversionService.convert(l, ListingLightBO.class))

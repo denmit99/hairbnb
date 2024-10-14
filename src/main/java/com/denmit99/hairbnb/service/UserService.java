@@ -4,6 +4,7 @@ import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.bo.auth.UserCreateRequestBO;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
 public interface UserService {
     UserBO findByEmail(String email);
@@ -12,5 +13,5 @@ public interface UserService {
 
     UserBO getCurrent();
 
-    void updateLastLoginDate(Long userId, ZonedDateTime lastLoginDate);
+    void updateLastLoginDate(UUID userId, ZonedDateTime lastLoginDate);
 }

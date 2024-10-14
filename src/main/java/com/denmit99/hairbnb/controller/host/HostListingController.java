@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/host/listings")
@@ -40,7 +41,7 @@ public class HostListingController {
     }
 
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable("id") @ListingIdExists Long listingId) {
+    public void delete(@PathVariable("id") @ListingIdExists UUID listingId) {
         listingService.delete(listingId);
     }
 

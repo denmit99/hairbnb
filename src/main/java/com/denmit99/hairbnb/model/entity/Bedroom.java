@@ -11,6 +11,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Entity
 @Table(name = "bedroom")
 @Builder
@@ -19,12 +21,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Bedroom {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
     @Column(name = "listing_id")
-    private Long listingId;
+    private UUID listingId;
 
     @Column(name = "room_number")
     private Integer roomNumber;

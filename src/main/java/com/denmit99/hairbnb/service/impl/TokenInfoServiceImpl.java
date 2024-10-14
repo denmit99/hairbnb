@@ -6,6 +6,8 @@ import com.denmit99.hairbnb.service.TokenInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class TokenInfoServiceImpl implements TokenInfoService {
 
@@ -18,7 +20,7 @@ public class TokenInfoServiceImpl implements TokenInfoService {
     }
 
     @Override
-    public void revokeAll(Long userId) {
+    public void revokeAll(UUID userId) {
         var validTokens = tokenInfoRepository.findAll(userId);
         validTokens.forEach(t -> {
             t.setRevoked(true);
@@ -28,7 +30,7 @@ public class TokenInfoServiceImpl implements TokenInfoService {
     }
 
     @Override
-    public void create(Long userId, String token, String refreshToken) {
+    public void create(UUID userId, String token, String refreshToken) {
         var tokenEntity = TokenInfo.builder()
                 .userId(userId)
                 .token(token)

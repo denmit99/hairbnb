@@ -3,7 +3,6 @@ package com.denmit99.hairbnb.service.impl;
 import com.denmit99.hairbnb.model.entity.TokenInfo;
 import com.denmit99.hairbnb.repository.TokenInfoRepository;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -12,6 +11,7 @@ import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.eq;
@@ -44,7 +44,7 @@ public class TokenInfoServiceImplTest {
 
     @Test
     public void revokeAll() {
-        Long userId = RandomUtils.nextLong();
+        UUID userId = UUID.randomUUID();
         List<TokenInfo> tokenInfoList = List.of(new TokenInfo());
         when(tokenInfoRepository.findAll(userId))
                 .thenReturn(tokenInfoList);
@@ -57,7 +57,7 @@ public class TokenInfoServiceImplTest {
 
     @Test
     public void create() {
-        Long userId = RandomUtils.nextLong();
+        UUID userId = UUID.randomUUID();
         String token = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         String refreshToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
 

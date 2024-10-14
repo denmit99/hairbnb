@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Service
 public class ListingAmenityServiceImpl implements ListingAmenityService {
@@ -17,7 +18,7 @@ public class ListingAmenityServiceImpl implements ListingAmenityService {
     private ListingAmenityRepository repository;
 
     @Override
-    public List<ListingAmenity> save(Long listingId, Set<AmenityType> amenities) {
+    public List<ListingAmenity> save(UUID listingId, Set<AmenityType> amenities) {
         var listingAmenityEntities = amenities.stream()
                 .map(a -> ListingAmenity.builder()
                         .listingId(listingId)
@@ -28,12 +29,12 @@ public class ListingAmenityServiceImpl implements ListingAmenityService {
     }
 
     @Override
-    public void deleteByListingId(Long listingId) {
+    public void deleteByListingId(UUID listingId) {
         repository.deleteByListingId(listingId);
     }
 
     @Override
-    public Set<String> getByListing(Long listingId) {
+    public Set<String> getByListing(UUID listingId) {
         return repository.findAllByListingId(listingId);
     }
 }

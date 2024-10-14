@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.ZonedDateTime;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
@@ -35,6 +36,7 @@ public class UserServiceImpl implements UserService {
     public UserBO create(UserCreateRequestBO createRequestBO) {
         var now = ZonedDateTime.now();
         User user = User.builder()
+                .id(UUID.randomUUID())
                 .firstName(createRequestBO.getFirstName())
                 .lastName(createRequestBO.getLastName())
                 .email(createRequestBO.getEmail())
@@ -54,7 +56,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateLastLoginDate(Long userId, ZonedDateTime lastLoginDate) {
+    public void updateLastLoginDate(UUID userId, ZonedDateTime lastLoginDate) {
         repository.updateLastLoginDate(userId, lastLoginDate);
     }
 }

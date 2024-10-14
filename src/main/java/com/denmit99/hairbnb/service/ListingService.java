@@ -6,15 +6,16 @@ import com.denmit99.hairbnb.model.bo.ListingSearchRequestBO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 
 import java.util.List;
+import java.util.UUID;
 
 public interface ListingService {
     ListingBO create(ListingCreateRequestDTO requestDTO);
 
-    void delete(Long listingId);
+    void delete(UUID listingId);
 
-    ListingBO get(Long listingId);
+    ListingBO get(UUID listingId);
 
     List<ListingLightBO> search(ListingSearchRequestBO requestBO);
 
-    List<ListingLightBO> getAllByUserId(Long userId);
+    List<ListingLightBO> getAllByUserId(UUID userId);
 }

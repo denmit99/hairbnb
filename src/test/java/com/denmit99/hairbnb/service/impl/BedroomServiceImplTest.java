@@ -2,7 +2,6 @@ package com.denmit99.hairbnb.service.impl;
 
 import com.denmit99.hairbnb.model.entity.Bedroom;
 import com.denmit99.hairbnb.repository.BedroomRepository;
-import org.apache.commons.lang3.RandomUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
@@ -11,6 +10,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.core.convert.ConversionService;
 
 import java.util.List;
+import java.util.UUID;
 
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -29,7 +29,7 @@ public class BedroomServiceImplTest {
 
     @Test
     void getByListingId() {
-        Long listingId = RandomUtils.nextLong();
+        UUID listingId = UUID.randomUUID();
         when(bedroomRepository.findAllByListingId(listingId))
                 .thenReturn(List.of(Bedroom.builder().build()));
         service.getByListingId(listingId);
@@ -39,7 +39,7 @@ public class BedroomServiceImplTest {
 
     @Test
     void deleteByListingId_InvokesRepository() {
-        Long listingId = RandomUtils.nextLong();
+        UUID listingId = UUID.randomUUID();
         service.deleteByListingId(listingId);
         verify(bedroomRepository).deleteByListingId(listingId);
     }

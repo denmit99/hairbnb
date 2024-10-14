@@ -36,6 +36,7 @@ import org.springframework.security.access.AccessDeniedException;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
+import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
@@ -88,8 +89,8 @@ public class ListingServiceImplTest {
 
     @Test
     public void delete() {
-        Long listingId = RandomUtils.nextLong();
-        Long userId = RandomUtils.nextLong();
+        UUID listingId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
 
         UserBO user = new UserBO();
         user.setId(userId);
@@ -106,21 +107,21 @@ public class ListingServiceImplTest {
 
     @Test
     public void deleteListingOfAnotherUser() {
-        Long listingId = RandomUtils.nextLong();
-        Long userId = RandomUtils.nextLong();
+        UUID listingId = UUID.randomUUID();
+        UUID userId = UUID.randomUUID();
 
         UserBO user = new UserBO();
         user.setId(userId);
         Mockito.when(userService.getCurrent()).thenReturn(user);
         Mockito.when(listingRepository.findById(listingId))
-                .thenReturn(Optional.of(createListing(userId - 1)));
+                .thenReturn(Optional.of(createListing(UUID.randomUUID())));
 
         assertThrows(AccessDeniedException.class, () -> service.delete(listingId));
     }
 
     @Test
     public void deleteListingNotFoundThrowsException() {
-        Long listingId = RandomUtils.nextLong();
+        UUID listingId = UUID.randomUUID();
         Mockito.when(userService.getCurrent()).thenReturn(new UserBO());
         Mockito.when(listingRepository.findById(listingId))
                 .thenReturn(Optional.empty());
@@ -130,7 +131,7 @@ public class ListingServiceImplTest {
 
     @Test
     public void get() {
-        Long listingId = RandomUtils.nextLong();
+        UUID listingId = UUID.randomUUID();
         Listing listing = new Listing();
         AmenityType amenity = RandomEnumUtils.nextValue(AmenityType.class);
         listing.setAmenities(List.of(ListingAmenity.builder().amenityCode(amenity).build()));
@@ -147,7 +148,7 @@ public class ListingServiceImplTest {
 
     @Test
     public void getListingNotFoundThrowsException() {
-        Long listingId = RandomUtils.nextLong();
+        UUID listingId = UUID.randomUUID();
         when(listingRepository.findById(listingId)).thenReturn(Optional.empty());
 
         assertThrows(NotFoundException.class, () -> service.get(listingId));
@@ -168,7 +169,7 @@ public class ListingServiceImplTest {
         verify(listingRepository).findAll(any(Specification.class), any(Pageable.class));
     }
 
-    private Listing createListing(Long userId) {
+    private Listing createListing(UUID userId) {
         Listing listing = new Listing();
         listing.setUserId(userId);
         return listing;

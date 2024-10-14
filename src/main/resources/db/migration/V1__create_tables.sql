@@ -1,5 +1,5 @@
 CREATE TABLE IF NOT EXISTS user_info (
-    id SERIAL PRIMARY KEY,
+    id UUID PRIMARY KEY,
     first_name TEXT,
     last_name TEXT,
     email TEXT NOT NULL UNIQUE,
@@ -10,8 +10,8 @@ CREATE TABLE IF NOT EXISTS user_info (
 );
 
 CREATE TABLE IF NOT EXISTS token (
-    id SERIAL PRIMARY KEY,
-    user_id BIGINT REFERENCES user_info(id),
+    id UUID PRIMARY KEY,
+    user_id UUID REFERENCES user_info(id),
     token TEXT NOT NULL,
     refresh_token TEXT NOT NULL,
     expired BOOLEAN NOT NULL DEFAULT FALSE,
@@ -19,8 +19,8 @@ CREATE TABLE IF NOT EXISTS token (
 );
 
 CREATE TABLE IF NOT EXISTS public.listing (
-    id SERIAL PRIMARY KEY,
-    user_id BIGINT NOT NULL REFERENCES user_info(id),
+    id UUID PRIMARY KEY,
+    user_id UUID NOT NULL REFERENCES user_info(id),
     title TEXT NOT NULL,
     description TEXT NOT NULL,
     address TEXT NOT NULL,
@@ -37,8 +37,8 @@ CREATE TABLE IF NOT EXISTS public.listing (
 );
 
 CREATE TABLE IF NOT EXISTS public.bedroom (
-    id SERIAL PRIMARY KEY,
-    listing_id BIGINT NOT NULL REFERENCES public.listing(id),
+    id UUID PRIMARY KEY,
+    listing_id UUID NOT NULL REFERENCES public.listing(id),
     room_number INT NOT NULL,
     single_beds_number INT NOT NULL,
     double_beds_number INT NOT NULL,
@@ -47,7 +47,7 @@ CREATE TABLE IF NOT EXISTS public.bedroom (
 );
 
 CREATE TABLE IF NOT EXISTS public.listing_amenity (
-    id SERIAL PRIMARY KEY,
-    listing_id BIGINT NOT NULL REFERENCES public.listing(id),
+    id UUID PRIMARY KEY,
+    listing_id UUID NOT NULL REFERENCES public.listing(id),
     amenity_code TEXT NOT NULL
 );

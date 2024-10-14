@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class BedroomServiceImpl implements BedroomService {
@@ -23,7 +24,7 @@ public class BedroomServiceImpl implements BedroomService {
     private ConversionService conversionService;
 
     @Override
-    public List<BedroomBO> save(Long listingId, List<BedroomDTO> bedrooms) {
+    public List<BedroomBO> save(UUID listingId, List<BedroomDTO> bedrooms) {
         List<Bedroom> entities = new ArrayList<>();
         for (int i = 0; i < bedrooms.size(); i++) {
             var bedroom = bedrooms.get(i);
@@ -44,7 +45,7 @@ public class BedroomServiceImpl implements BedroomService {
     }
 
     @Override
-    public List<BedroomBO> getByListingId(Long listingId) {
+    public List<BedroomBO> getByListingId(UUID listingId) {
         return bedroomRepository.findAllByListingId(listingId)
                 .stream()
                 .map(b -> conversionService.convert(b, BedroomBO.class))
@@ -52,7 +53,7 @@ public class BedroomServiceImpl implements BedroomService {
     }
 
     @Override
-    public void deleteByListingId(Long listingId) {
+    public void deleteByListingId(UUID listingId) {
         bedroomRepository.deleteByListingId(listingId);
     }
 }

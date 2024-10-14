@@ -5,11 +5,12 @@ import com.denmit99.hairbnb.model.entity.ListingAmenity;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 public interface ListingAmenityService {
-    List<ListingAmenity> save(Long listingId, Set<AmenityType> amenities);
+    List<ListingAmenity> save(UUID listingId, Set<AmenityType> amenities);
 
-    void deleteByListingId(Long listingId);
+    void deleteByListingId(UUID listingId);
 
-    Set<String> getByListing(Long listingId);
+    Set<String> getByListing(UUID listingId);
 }

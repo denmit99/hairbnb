@@ -6,16 +6,18 @@ import jakarta.validation.ConstraintValidatorContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-@Component
-public class ListingIdExistsValidator implements ConstraintValidator<ListingIdExists, Long> {
+import java.util.UUID;
 
-    private static final String MESSAGE = "Listing with id %d does not exist";
+@Component
+public class ListingIdExistsValidator implements ConstraintValidator<ListingIdExists, UUID> {
+
+    private static final String MESSAGE = "Listing with id %s does not exist";
 
     @Autowired
     private ListingRepository listingRepository;
 
     @Override
-    public boolean isValid(Long listingId, ConstraintValidatorContext context) {
+    public boolean isValid(UUID listingId, ConstraintValidatorContext context) {
         if (listingId == null) {
             return true;
         }

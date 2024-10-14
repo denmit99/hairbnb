@@ -30,6 +30,7 @@ import org.springframework.test.web.servlet.ResultMatcher;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 import java.util.function.Consumer;
 
 import static org.mockito.Mockito.verify;
@@ -161,7 +162,7 @@ public class HostListingControllerTest {
     @Test
     @WithMockUser(roles = {ROLE_HOST})
     void delete_NonExisting_Returns4xxCode() throws Exception {
-        Long listingId = RandomUtils.nextLong();
+        UUID listingId = UUID.randomUUID();
         when(listingRepository.existsById(listingId)).thenReturn(false);
         mockMvc.perform(delete(HOST_LISTING_URI_PREFIX + "/" + listingId)
                         .with(csrf())
@@ -172,7 +173,7 @@ public class HostListingControllerTest {
     @Test
     @WithMockUser(roles = {ROLE_HOST})
     void delete_ReturnsOk() throws Exception {
-        Long listingId = RandomUtils.nextLong();
+        UUID listingId = UUID.randomUUID();
         when(listingRepository.existsById(listingId)).thenReturn(true);
         mockMvc.perform(delete(HOST_LISTING_URI_PREFIX + "/" + listingId)
                         .with(csrf())
@@ -192,7 +193,7 @@ public class HostListingControllerTest {
     @Test
     @WithMockUser(roles = {ROLE_HOST})
     void getAll() throws Exception {
-        Long userId = RandomUtils.nextLong();
+        UUID userId = UUID.randomUUID();
         when(userService.getCurrent()).thenReturn(
                 UserBO.builder().id(userId).build()
         );

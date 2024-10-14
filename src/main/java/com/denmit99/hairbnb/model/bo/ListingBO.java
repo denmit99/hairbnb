@@ -11,15 +11,16 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Builder
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 public class ListingBO {
-    private Long id;
+    private UUID id;
 
-    private Long userId;
+    private UUID userId;
 
     private String title;
 

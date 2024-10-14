@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/listings")
@@ -37,7 +38,7 @@ public class ListingController {
     }
 
     @GetMapping("/{id}")
-    public ListingDTO get(@PathVariable("id") @ListingIdExists Long listingId) {
+    public ListingDTO get(@PathVariable("id") @ListingIdExists UUID listingId) {
         return conversionService.convert(listingService.get(listingId), ListingDTO.class);
     }
 }

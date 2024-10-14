@@ -7,8 +7,9 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.ZonedDateTime;
+import java.util.UUID;
 
-public interface UserRepository extends JpaRepository<User, Long> {
+public interface UserRepository extends JpaRepository<User, UUID> {
     User findByEmail(String email);
 
     @Modifying
@@ -18,5 +19,5 @@ public interface UserRepository extends JpaRepository<User, Long> {
             SET last_login_date = :dateTime
             WHERE id = :userId
             """, nativeQuery = true)
-    void updateLastLoginDate(Long userId, ZonedDateTime dateTime);
+    void updateLastLoginDate(UUID userId, ZonedDateTime dateTime);
 }

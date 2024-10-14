@@ -14,6 +14,8 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.UUID;
+
 @Data
 @Entity
 @Builder
@@ -22,12 +24,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ListingAmenity {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.UUID)
     @Column(name = "id")
-    private Long id;
+    private UUID id;
 
     @Column(name = "listing_id")
-    private Long listingId;
+    private UUID listingId;
 
     @Column(name = "amenity_code")
     @Enumerated(EnumType.STRING)

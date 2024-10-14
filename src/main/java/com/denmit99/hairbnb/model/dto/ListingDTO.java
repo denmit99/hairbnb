@@ -10,13 +10,14 @@ import lombok.NoArgsConstructor;
 
 import java.util.List;
 import java.util.Set;
+import java.util.UUID;
 
 @Data
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
 public class ListingDTO {
-    private Long id;
+    private UUID id;
 
     private String title;
 
