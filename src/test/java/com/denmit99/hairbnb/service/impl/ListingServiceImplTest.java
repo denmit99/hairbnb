@@ -106,7 +106,7 @@ public class ListingServiceImplTest {
     }
 
     @Test
-    public void deleteListingOfAnotherUser() {
+    public void deleteListing_OfAnotherUser_ThrowsException() {
         UUID listingId = UUID.randomUUID();
         UUID userId = UUID.randomUUID();
 
@@ -120,7 +120,7 @@ public class ListingServiceImplTest {
     }
 
     @Test
-    public void deleteListingNotFoundThrowsException() {
+    public void deleteListing_NotFound_ThrowsException() {
         UUID listingId = UUID.randomUUID();
         Mockito.when(userService.getCurrent()).thenReturn(new UserBO());
         Mockito.when(listingRepository.findById(listingId))
@@ -147,7 +147,7 @@ public class ListingServiceImplTest {
     }
 
     @Test
-    public void getListingNotFoundThrowsException() {
+    public void getListing_NotFound_ThrowsException() {
         UUID listingId = UUID.randomUUID();
         when(listingRepository.findById(listingId)).thenReturn(Optional.empty());
 

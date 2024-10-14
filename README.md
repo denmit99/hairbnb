@@ -1,4 +1,4 @@
-# HairBnb - Search and Rent Properties
+# HairBnb  Search and Rent Properties
 
 **HairBnb** is a platform for accommodation booking (basically an _AirBnb_ clone).
 
@@ -26,6 +26,11 @@ The **_frontend_** repository can be found here https://github.com/denmit99/hair
 `docker-compose --profile api up -d ` Start only backend + database
 
 `docker-compose --profile all up -d --build`  Rebuild all services and then start containers
+
+---
+
+## API Docs
+https://available-mechanic-6c2.notion.site/HairBnb-API-Documentation-10c12d058faa809d902cd772c4e1f535
 
 ---
 

@@ -100,7 +100,7 @@ public class AuthenticationServiceImplTest {
     }
 
     @Test
-    public void loginUserEmailNotFoundThrowsException() {
+    public void login_UserEmailNotFound_ThrowsException() {
         LoginRequestDTO requestDTO = new LoginRequestDTO();
         requestDTO.setEmail(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
         when(userService.findByEmail(requestDTO.getEmail()))

@@ -56,7 +56,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void findByEmailNotFoundReturnsNull() {
+    public void findByEmail_NotFound_ReturnsNull() {
         String email = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         when(repository.findByEmail(email))
                 .thenReturn(null);

@@ -16,7 +16,7 @@ public class ListingCreateRequestValidatorTest {
     private final ListingCreateRequestValidator validator = new ListingCreateRequestValidator();
 
     @Test
-    public void guestsMoreThanPlaces() {
+    public void guestsMoreThanPlaces_ReturnsFalse() {
         var req = new ListingCreateRequestDTO();
         req.setMaxGuests(4);
         req.setBedrooms(List.of(BedroomDTO.builder()
@@ -29,7 +29,7 @@ public class ListingCreateRequestValidatorTest {
     }
 
     @Test
-    public void guestsLessThanPlaces() {
+    public void guestsLessThanPlaces_ReturnsTrue() {
         var req = new ListingCreateRequestDTO();
         req.setMaxGuests(2);
         req.setBedrooms(List.of(BedroomDTO.builder()
