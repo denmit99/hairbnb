@@ -31,6 +31,7 @@ public class ListingBOToListingDTOConverter implements Converter<ListingBO, List
                 .pricePerNight(source.getPricePerNight())
                 .currency(source.getCurrency())
                 .numberOfBathrooms(source.getNumberOfBathrooms())
+                .numberOfGuests(source.getMaxGuests())
                 .amenities(source.getAmenities().stream().map(AmenityType::name).collect(Collectors.toSet()))
                 .bedrooms(source.getBedrooms().stream()
                         .map(b -> conversionService.convert(b, BedroomDTO.class))

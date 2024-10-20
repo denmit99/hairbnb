@@ -37,5 +37,7 @@ public class ListingDTO {
 
     private Integer numberOfBathrooms;
 
+    private Integer numberOfGuests;
+
     private Set<String> amenities;
 }

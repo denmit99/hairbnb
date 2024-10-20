@@ -21,11 +21,11 @@ The **_frontend_** repository can be found here https://github.com/denmit99/hair
 ---
 
 ## How to run locally
-`docker-compose --profile all up -d` Start all services
+`docker compose --profile all up -d` Start all services
 
-`docker-compose --profile api up -d ` Start only backend + database
+`docker compose --profile api up -d ` Start only backend + database
 
-`docker-compose --profile all up -d --build`  Rebuild all services and then start containers
+`docker compose --profile all up -d --build`  Rebuild all services and then start containers
 
 ---
 
