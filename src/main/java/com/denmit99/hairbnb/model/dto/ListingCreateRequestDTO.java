@@ -58,6 +58,7 @@ public class ListingCreateRequestDTO {
     @Max(Constants.LISTING_MAX_MAX_GUESTS)
     private Integer maxGuests;
 
+    @Valid
     @NotEmpty
     @Size(max = Constants.LISTING_MAX_BEDROOMS)
     private List<BedroomListingCreateRequestDTO> bedrooms;
