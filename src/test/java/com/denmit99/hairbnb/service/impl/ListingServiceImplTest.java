@@ -9,7 +9,7 @@ import com.denmit99.hairbnb.model.bo.BedroomBO;
 import com.denmit99.hairbnb.model.bo.ListingSearchRequestBO;
 import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.dto.AddressDTO;
-import com.denmit99.hairbnb.model.dto.BedroomDTO;
+import com.denmit99.hairbnb.model.dto.BedroomListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.entity.Listing;
 import com.denmit99.hairbnb.model.entity.ListingAmenity;
@@ -195,7 +195,7 @@ public class ListingServiceImplTest {
                         RandomEnumUtils.nextValue(AmenityType.class)
                 ))
                 .pricePerNight(RandomUtils.nextDouble())
-                .bedrooms(List.of(BedroomDTO.builder().singleNum(1).build()))
+                .bedrooms(List.of(BedroomListingCreateRequestDTO.builder().singleNum(1).build()))
                 .build();
     }
 }

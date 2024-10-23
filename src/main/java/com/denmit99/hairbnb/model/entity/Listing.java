@@ -42,8 +42,20 @@ public class Listing {
     @Column(name = "description")
     private String description;
 
-    @Column(name = "address")
-    private String address;
+    @Column(name = "country")
+    private String country;
+
+    @Column(name = "city")
+    private String city;
+
+    @Column(name = "street")
+    private String street;
+
+    @Column(name = "house_number")
+    private String houseNumber;
+
+    @Column(name = "zip_code")
+    private String zipCode;
 
     @Column(name = "price")
     private Double pricePerNight;

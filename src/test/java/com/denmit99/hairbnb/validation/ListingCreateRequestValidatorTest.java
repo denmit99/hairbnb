@@ -1,6 +1,6 @@
 package com.denmit99.hairbnb.validation;
 
-import com.denmit99.hairbnb.model.dto.BedroomDTO;
+import com.denmit99.hairbnb.model.dto.BedroomListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import jakarta.validation.ConstraintValidatorContext;
 import org.junit.jupiter.api.Test;
@@ -19,7 +19,7 @@ public class ListingCreateRequestValidatorTest {
     public void guestsMoreThanPlaces_ReturnsFalse() {
         var req = new ListingCreateRequestDTO();
         req.setMaxGuests(4);
-        req.setBedrooms(List.of(BedroomDTO.builder()
+        req.setBedrooms(List.of(BedroomListingCreateRequestDTO.builder()
                 .singleNum(1)
                 .queenNum(1)
                 .build()));
@@ -32,9 +32,9 @@ public class ListingCreateRequestValidatorTest {
     public void guestsLessThanPlaces_ReturnsTrue() {
         var req = new ListingCreateRequestDTO();
         req.setMaxGuests(2);
-        req.setBedrooms(List.of(BedroomDTO.builder()
+        req.setBedrooms(List.of(BedroomListingCreateRequestDTO.builder()
                 .singleNum(1)
-                        .queenNum(1)
+                .queenNum(1)
                 .build()));
         var ctx = Mockito.mock(ConstraintValidatorContext.class);
         var res = validator.isValid(req, ctx);

@@ -26,7 +26,9 @@ public class AddressDTO {
     @Size(max = Constants.LISTING_MAX_ADDRESS_LENGTH)
     private String city;
 
-    //TODO houseNumber
+    @NotBlank
+    @Size(max = Constants.LISTING_MAX_ADDRESS_LENGTH)
+    private String houseNumber;
 
     @NotBlank
     @Pattern(regexp = "\\d+")

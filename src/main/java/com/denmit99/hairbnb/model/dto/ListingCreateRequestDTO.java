@@ -60,7 +60,7 @@ public class ListingCreateRequestDTO {
 
     @NotEmpty
     @Size(max = Constants.LISTING_MAX_BEDROOMS)
-    private List<BedroomDTO> bedrooms;
+    private List<BedroomListingCreateRequestDTO> bedrooms;
 
     @NotNull
     @Min(0)

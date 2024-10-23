@@ -26,7 +26,15 @@ public class ListingBO {
 
     private String description;
 
-    private String address;
+    private String country;
+
+    private String street;
+
+    private String city;
+
+    private String houseNumber;
+
+    private String zipCode;
 
     private Double pricePerNight;
 

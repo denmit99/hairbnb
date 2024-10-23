@@ -6,7 +6,7 @@ import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
 import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.dto.AddressDTO;
-import com.denmit99.hairbnb.model.dto.BedroomDTO;
+import com.denmit99.hairbnb.model.dto.BedroomListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.repository.ListingRepository;
 import com.denmit99.hairbnb.service.JwtService;
@@ -149,7 +149,7 @@ public class HostListingControllerTest {
     void create_GuestsMoreThanBeds_Returns400() throws Exception {
         testCreateRequestDtoValidation(dto -> {
             dto.setMaxGuests(4);
-            dto.setBedrooms(List.of(BedroomDTO.builder().singleNum(1).build()));
+            dto.setBedrooms(List.of(BedroomListingCreateRequestDTO.builder().singleNum(1).build()));
         }, status().isBadRequest());
     }
 
@@ -233,6 +233,7 @@ public class HostListingControllerTest {
         addressDTO.setCountry(RandomStringUtils.randomAlphanumeric(10));
         addressDTO.setStreet(RandomStringUtils.randomAlphanumeric(10));
         addressDTO.setCity(RandomStringUtils.randomAlphanumeric(10));
+        addressDTO.setHouseNumber(RandomStringUtils.randomNumeric(3));
         addressDTO.setZipCode(RandomStringUtils.randomNumeric(5));
         dto.setAddress(addressDTO);
         dto.setPricePerNight(20.0);
@@ -241,10 +242,10 @@ public class HostListingControllerTest {
         dto.setPlaceType(PlaceType.ENTIRE_PLACE);
         dto.setMaxGuests(4);
         dto.setBedrooms(List.of(
-                BedroomDTO.builder()
+                BedroomListingCreateRequestDTO.builder()
                         .queenNum(1)
                         .build(),
-                BedroomDTO.builder()
+                BedroomListingCreateRequestDTO.builder()
                         .sofaNum(1)
                         .singleNum(1)
                         .build())

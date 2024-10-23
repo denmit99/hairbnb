@@ -71,7 +71,11 @@ public class ListingServiceImpl implements ListingService {
                 .title(requestDTO.getTitle())
                 .userId(user.getId())
                 .description(requestDTO.getDescription())
-                .address(convertAddressToString(requestDTO.getAddress()))
+                .country(requestDTO.getAddress().getCountry())
+                .city(requestDTO.getAddress().getCity())
+                .street(requestDTO.getAddress().getStreet())
+                .houseNumber(requestDTO.getAddress().getHouseNumber())
+                .zipCode(requestDTO.getAddress().getZipCode())
                 .pricePerNight(requestDTO.getPricePerNight())
                 .pricePerNightUsd(currencyConverter.convertToDefault(
                         requestDTO.getPricePerNight(),
