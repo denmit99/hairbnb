@@ -1,6 +1,7 @@
 package com.denmit99.hairbnb.controller.host;
 
 import com.denmit99.hairbnb.model.bo.ListingBO;
+import com.denmit99.hairbnb.model.bo.ListingCreateRequestBO;
 import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.dto.ListingDTO;
 import com.denmit99.hairbnb.model.dto.ListingLightDTO;
@@ -36,7 +37,7 @@ public class HostListingController {
 
     @PostMapping
     public ListingDTO create(@Valid @RequestBody ListingCreateRequestDTO requestDTO) {
-        ListingBO res = listingService.create(requestDTO);
+        ListingBO res = listingService.create(conversionService.convert(requestDTO, ListingCreateRequestBO.class));
         return conversionService.convert(res, ListingDTO.class);
     }
 

@@ -9,14 +9,9 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressBO {
-    private String country;
-
-    private String street;
-
-    private String city;
-
-    private String houseNumber;
-
-    private String zipCode;
+public class BedroomListingCreateRequestBO {
+    private Integer doubleNum;
+    private Integer singleNum;
+    private Integer queenNum;
+    private Integer sofaNum;
 }

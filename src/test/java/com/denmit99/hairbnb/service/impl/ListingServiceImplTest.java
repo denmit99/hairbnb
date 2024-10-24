@@ -5,12 +5,12 @@ import com.denmit99.hairbnb.model.AmenityType;
 import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
 import com.denmit99.hairbnb.model.PropertyType;
+import com.denmit99.hairbnb.model.bo.AddressBO;
 import com.denmit99.hairbnb.model.bo.BedroomBO;
+import com.denmit99.hairbnb.model.bo.BedroomListingCreateRequestBO;
+import com.denmit99.hairbnb.model.bo.ListingCreateRequestBO;
 import com.denmit99.hairbnb.model.bo.ListingSearchRequestBO;
 import com.denmit99.hairbnb.model.bo.UserBO;
-import com.denmit99.hairbnb.model.dto.AddressDTO;
-import com.denmit99.hairbnb.model.dto.BedroomListingCreateRequestDTO;
-import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.entity.Listing;
 import com.denmit99.hairbnb.model.entity.ListingAmenity;
 import com.denmit99.hairbnb.repository.ListingRepository;
@@ -76,9 +76,9 @@ public class ListingServiceImplTest {
         Listing listingEntity = new Listing();
         Mockito.when(listingRepository.save(any()))
                 .thenReturn(listingEntity);
-        ListingCreateRequestDTO requestDTO = createRequestDTO();
+        ListingCreateRequestBO requestBO = createRequestBO();
 
-        service.create(requestDTO);
+        service.create(requestBO);
 
         verify(userService).getCurrent();
         verify(listingRepository).save(any());
@@ -175,11 +175,11 @@ public class ListingServiceImplTest {
         return listing;
     }
 
-    private ListingCreateRequestDTO createRequestDTO() {
-        return ListingCreateRequestDTO.builder()
+    private ListingCreateRequestBO createRequestBO() {
+        return ListingCreateRequestBO.builder()
                 .title(RandomStringUtils.randomAlphabetic(5))
                 .description(RandomStringUtils.randomAlphanumeric(10))
-                .address(AddressDTO.builder()
+                .address(AddressBO.builder()
                         .street(RandomStringUtils.randomAlphanumeric(5))
                         .city(RandomStringUtils.randomAlphabetic(5))
                         .country(RandomStringUtils.randomAlphabetic(5))
@@ -195,7 +195,7 @@ public class ListingServiceImplTest {
                         RandomEnumUtils.nextValue(AmenityType.class)
                 ))
                 .pricePerNight(RandomUtils.nextDouble())
-                .bedrooms(List.of(BedroomListingCreateRequestDTO.builder().singleNum(1).build()))
+                .bedrooms(List.of(BedroomListingCreateRequestBO.builder().singleNum(1).build()))
                 .build();
     }
 }

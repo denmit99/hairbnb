@@ -3,9 +3,9 @@ package com.denmit99.hairbnb.service.impl;
 import com.denmit99.hairbnb.exception.NotFoundException;
 import com.denmit99.hairbnb.model.UserToken;
 import com.denmit99.hairbnb.model.bo.UserBO;
+import com.denmit99.hairbnb.model.bo.auth.LoginRequestBO;
 import com.denmit99.hairbnb.model.bo.auth.LoginResponseBO;
-import com.denmit99.hairbnb.model.dto.auth.LoginRequestDTO;
-import com.denmit99.hairbnb.model.dto.auth.RegisterRequestDTO;
+import com.denmit99.hairbnb.model.bo.auth.RegisterRequestBO;
 import com.denmit99.hairbnb.service.CustomPasswordEncoder;
 import com.denmit99.hairbnb.service.JwtService;
 import com.denmit99.hairbnb.service.TokenInfoService;
@@ -52,8 +52,8 @@ public class AuthenticationServiceImplTest {
 
     @Test
     public void register() {
-        RegisterRequestDTO requestDTO = new RegisterRequestDTO();
-        when(passwordEncoder.encode(requestDTO.getPassword()))
+        RegisterRequestBO requestBO = new RegisterRequestBO();
+        when(passwordEncoder.encode(requestBO.getPassword()))
                 .thenReturn(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
         UserBO userBO = new UserBO();
         when(userService.create(any()))
@@ -68,7 +68,7 @@ public class AuthenticationServiceImplTest {
         when(jwtService.generateRefreshToken(userToken))
                 .thenReturn(refreshToken);
 
-        var res = service.register(requestDTO);
+        var res = service.register(requestBO);
 
         assertEquals(token, res.getToken());
         assertEquals(refreshToken, res.getRefreshToken());
@@ -76,13 +76,16 @@ public class AuthenticationServiceImplTest {
 
     @Test
     public void login() {
-        LoginRequestDTO requestDTO = new LoginRequestDTO();
-        requestDTO.setEmail(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
+        LoginRequestBO requestBO = new LoginRequestBO();
+        requestBO.setEmail(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
+        requestBO.setPassword(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
         UserBO userBO = new UserBO();
         userBO.setId(UUID.randomUUID());
-        when(userService.findByEmail(requestDTO.getEmail()))
+        userBO.setPassword(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
+        when(userService.findByEmail(requestBO.getEmail()))
                 .thenReturn(userBO);
         UserToken userToken = new UserToken();
+        when(passwordEncoder.matches(requestBO.getPassword(), userBO.getPassword())).thenReturn(true);
         when(conversionService.convert(userBO, UserToken.class))
                 .thenReturn(userToken);
         String token = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
@@ -90,7 +93,7 @@ public class AuthenticationServiceImplTest {
         when(jwtService.generate(userToken)).thenReturn(token);
         when(jwtService.generateRefreshToken(userToken)).thenReturn(refreshToken);
 
-        LoginResponseBO res = service.login(requestDTO);
+        LoginResponseBO res = service.login(requestBO);
 
         assertNotNull(res);
         assertEquals(token, res.getToken());
@@ -101,11 +104,27 @@ public class AuthenticationServiceImplTest {
 
     @Test
     public void login_UserEmailNotFound_ThrowsException() {
-        LoginRequestDTO requestDTO = new LoginRequestDTO();
-        requestDTO.setEmail(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
-        when(userService.findByEmail(requestDTO.getEmail()))
+        LoginRequestBO requestBO = new LoginRequestBO();
+        requestBO.setEmail(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
+        when(userService.findByEmail(requestBO.getEmail()))
                 .thenReturn(null);
 
-        assertThrows(NotFoundException.class, () -> service.login(requestDTO));
+        assertThrows(NotFoundException.class, () -> service.login(requestBO));
     }
+
+    @Test
+    public void login_PasswordsDoNotMatch_ThrowsException() {
+        LoginRequestBO requestBO = new LoginRequestBO();
+        requestBO.setEmail(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
+        requestBO.setPassword(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
+        UserBO userBO = new UserBO();
+        userBO.setId(UUID.randomUUID());
+        userBO.setPassword(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE));
+        when(userService.findByEmail(requestBO.getEmail()))
+                .thenReturn(userBO);
+        when(passwordEncoder.matches(requestBO.getPassword(), userBO.getPassword())).thenReturn(false);
+
+        assertThrows(NotFoundException.class, () -> service.login(requestBO));
+    }
+
 }

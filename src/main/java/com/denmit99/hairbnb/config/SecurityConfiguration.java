@@ -1,7 +1,6 @@
 package com.denmit99.hairbnb.config;
 
 import com.denmit99.hairbnb.model.UserRole;
-import com.denmit99.hairbnb.service.UserTokenService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,9 +32,6 @@ public class SecurityConfiguration {
 
     @Autowired
     private JwtAuthenticationFilter jwtAuthenticationFilter;
-
-    @Autowired
-    private UserTokenService userTokenService;
 
     @Bean
     SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {

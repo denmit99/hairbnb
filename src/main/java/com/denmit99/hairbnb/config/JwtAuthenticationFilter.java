@@ -4,7 +4,6 @@ import com.denmit99.hairbnb.model.UserToken;
 import com.denmit99.hairbnb.service.JwtService;
 import com.denmit99.hairbnb.service.TokenInfoService;
 import com.denmit99.hairbnb.service.UserService;
-import com.denmit99.hairbnb.service.UserTokenService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -29,9 +28,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Autowired
     private JwtService jwtService;
-
-    @Autowired
-    private UserTokenService userTokenService;
 
     @Autowired
     private UserService userService;

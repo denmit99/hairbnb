@@ -13,7 +13,6 @@ import com.denmit99.hairbnb.service.JwtService;
 import com.denmit99.hairbnb.service.ListingService;
 import com.denmit99.hairbnb.service.TokenInfoService;
 import com.denmit99.hairbnb.service.UserService;
-import com.denmit99.hairbnb.service.UserTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.apache.commons.lang3.RandomUtils;
@@ -56,9 +55,6 @@ public class HostListingControllerTest {
 
     @MockBean
     private JwtService jwtService;
-
-    @MockBean
-    private UserTokenService userTokenService;
 
     @MockBean
     private UserService userService;

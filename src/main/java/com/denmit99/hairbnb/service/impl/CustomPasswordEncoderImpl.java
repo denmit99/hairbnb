@@ -15,4 +15,9 @@ public class CustomPasswordEncoderImpl implements CustomPasswordEncoder {
     public String encode(String str) {
         return passwordEncoder.encode(str);
     }
+
+    @Override
+    public boolean matches(String rawPassword, String encodedPassword) {
+        return passwordEncoder.matches(rawPassword, encodedPassword);
+    }
 }

@@ -1,7 +1,7 @@
 package com.denmit99.hairbnb.service.impl;
 
 import com.denmit99.hairbnb.model.bo.BedroomBO;
-import com.denmit99.hairbnb.model.dto.BedroomListingCreateRequestDTO;
+import com.denmit99.hairbnb.model.bo.BedroomListingCreateRequestBO;
 import com.denmit99.hairbnb.model.entity.Bedroom;
 import com.denmit99.hairbnb.repository.BedroomRepository;
 import com.denmit99.hairbnb.service.BedroomService;
@@ -24,7 +24,7 @@ public class BedroomServiceImpl implements BedroomService {
     private ConversionService conversionService;
 
     @Override
-    public List<BedroomBO> save(UUID listingId, List<BedroomListingCreateRequestDTO> bedrooms) {
+    public List<BedroomBO> save(UUID listingId, List<BedroomListingCreateRequestBO> bedrooms) {
         List<Bedroom> entities = new ArrayList<>();
         for (int i = 0; i < bedrooms.size(); i++) {
             var bedroom = bedrooms.get(i);

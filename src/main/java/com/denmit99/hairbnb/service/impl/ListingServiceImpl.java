@@ -4,11 +4,11 @@ import com.denmit99.hairbnb.exception.NotFoundException;
 import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.bo.BedroomBO;
 import com.denmit99.hairbnb.model.bo.ListingBO;
+import com.denmit99.hairbnb.model.bo.ListingCreateRequestBO;
 import com.denmit99.hairbnb.model.bo.ListingLightBO;
 import com.denmit99.hairbnb.model.bo.ListingSearchRequestBO;
 import com.denmit99.hairbnb.model.bo.UserBO;
 import com.denmit99.hairbnb.model.dto.AddressDTO;
-import com.denmit99.hairbnb.model.dto.ListingCreateRequestDTO;
 import com.denmit99.hairbnb.model.entity.Listing;
 import com.denmit99.hairbnb.model.entity.ListingAmenity;
 import com.denmit99.hairbnb.repository.ListingRepository;
@@ -64,36 +64,36 @@ public class ListingServiceImpl implements ListingService {
 
     @Transactional
     @Override
-    public ListingBO create(ListingCreateRequestDTO requestDTO) {
+    public ListingBO create(ListingCreateRequestBO requestBO) {
         ZonedDateTime now = ZonedDateTime.now();
         UserBO user = userService.getCurrent();
         Listing listing = Listing.builder()
-                .title(requestDTO.getTitle())
+                .title(requestBO.getTitle())
                 .userId(user.getId())
-                .description(requestDTO.getDescription())
-                .country(requestDTO.getAddress().getCountry())
-                .city(requestDTO.getAddress().getCity())
-                .street(requestDTO.getAddress().getStreet())
-                .houseNumber(requestDTO.getAddress().getHouseNumber())
-                .zipCode(requestDTO.getAddress().getZipCode())
-                .pricePerNight(requestDTO.getPricePerNight())
+                .description(requestBO.getDescription())
+                .country(requestBO.getAddress().getCountry())
+                .city(requestBO.getAddress().getCity())
+                .street(requestBO.getAddress().getStreet())
+                .houseNumber(requestBO.getAddress().getHouseNumber())
+                .zipCode(requestBO.getAddress().getZipCode())
+                .pricePerNight(requestBO.getPricePerNight())
                 .pricePerNightUsd(currencyConverter.convertToDefault(
-                        requestDTO.getPricePerNight(),
-                        requestDTO.getCurrency())
+                        requestBO.getPricePerNight(),
+                        requestBO.getCurrency())
                 )
-                .currency(requestDTO.getCurrency())
-                .propertyType(requestDTO.getPropertyType())
-                .placeType(requestDTO.getPlaceType())
-                .maxNumberOfGuests(requestDTO.getMaxGuests())
-                .numberOfBathrooms(requestDTO.getNumberOfBathrooms())
-                .numberOfBedrooms(requestDTO.getBedrooms().size())
+                .currency(requestBO.getCurrency())
+                .propertyType(requestBO.getPropertyType())
+                .placeType(requestBO.getPlaceType())
+                .maxNumberOfGuests(requestBO.getMaxGuests())
+                .numberOfBathrooms(requestBO.getNumberOfBathrooms())
+                .numberOfBedrooms(requestBO.getBedrooms().size())
                 .creationDate(now)
                 .updateDate(now)
                 .build();
         Listing res = listingRepository.save(listing);
-        List<BedroomBO> bedroomsBO = bedroomService.save(res.getId(), requestDTO.getBedrooms());
-        listingAmenityService.save(res.getId(), requestDTO.getAmenities());
-        return listingToListingBOConverter.convert(res, bedroomsBO, requestDTO.getAmenities());
+        List<BedroomBO> bedroomsBO = bedroomService.save(res.getId(), requestBO.getBedrooms());
+        listingAmenityService.save(res.getId(), requestBO.getAmenities());
+        return listingToListingBOConverter.convert(res, bedroomsBO, requestBO.getAmenities());
     }
 
     @Override
