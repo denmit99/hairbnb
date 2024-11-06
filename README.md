@@ -1,4 +1,4 @@
-# HairBnb  Search and Rent Properties
+# HairBnb — Search and Rent Properties
 
 **HairBnb** is a platform for accommodation booking (basically an _AirBnb_ clone).
 
