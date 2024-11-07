@@ -13,6 +13,7 @@ import com.denmit99.hairbnb.model.dto.ListingDTO;
 import com.denmit99.hairbnb.model.dto.ListingLightDTO;
 import com.denmit99.hairbnb.model.entity.User;
 import com.denmit99.hairbnb.repository.BedroomRepository;
+import com.denmit99.hairbnb.repository.ListingAmenityRepository;
 import com.denmit99.hairbnb.repository.ListingRepository;
 import com.denmit99.hairbnb.repository.UserRepository;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -44,6 +45,7 @@ import java.util.UUID;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -80,6 +82,9 @@ public class ListingIntegrationTest {
     private BedroomRepository bedroomRepository;
 
     @Autowired
+    private ListingAmenityRepository listingAmenityRepository;
+
+    @Autowired
     private ObjectMapper objectMapper;
 
     @BeforeAll
@@ -94,9 +99,10 @@ public class ListingIntegrationTest {
 
     @BeforeEach
     void setUp() {
-        userRepository.deleteAll();
-        listingRepository.deleteAll();
+        listingAmenityRepository.deleteAll();
         bedroomRepository.deleteAll();
+        listingRepository.deleteAll();
+        userRepository.deleteAll();
     }
 
     /**
@@ -107,22 +113,14 @@ public class ListingIntegrationTest {
         simulateHostUser();
 
         ListingCreateRequestDTO requestDTO = createCorrectListingCreateRequestDTO();
-        MvcResult createListingResult = mockMvc.perform(post(HOST_LISTING_URI_PREFIX)
-                        .with(csrf())
-                        .content(objectMapper.writeValueAsString(requestDTO))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn();
+        MvcResult createListingResult = performCreateListing(requestDTO);
         var listingId = objectMapper.readValue(createListingResult.getResponse().getContentAsString(), ListingDTO.class)
                 .getId();
 
-        MvcResult getMyListingsResult = mockMvc.perform(get(HOST_LISTING_URI_PREFIX)
-                        .with(csrf())
-                        .content(objectMapper.writeValueAsString(requestDTO))
-                        .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andReturn();
+        MvcResult getMyListingsResult = performGetHostListings();
         var myListings = objectMapper.readValue(getMyListingsResult.getResponse().getContentAsString(),
                 new TypeReference<List<ListingLightDTO>>() {
-        });
+                });
 
         MvcResult getListingResult = mockMvc.perform(get(LISTING_URI_PREFIX + "/" + listingId)
                         .with(csrf())
@@ -132,16 +130,54 @@ public class ListingIntegrationTest {
         var listing = objectMapper.readValue(getListingResult.getResponse().getContentAsString(), ListingDTO.class);
         assertEquals(1, listingRepository.findAll().size());
         assertEquals(requestDTO.getBedrooms().size(), bedroomRepository.findAll().size());
+        assertEquals(requestDTO.getAmenities().size(), listingAmenityRepository.findAll().size());
         assertEquals(1, myListings.size());
         assertNotNull(listing);
+    }
+
+    @Test
+    void deleteListing() throws Exception {
+        simulateHostUser();
+        ListingCreateRequestDTO requestDTO = createCorrectListingCreateRequestDTO();
+        MvcResult createListingResult = performCreateListing(requestDTO);
+        var listingId = objectMapper.readValue(createListingResult.getResponse().getContentAsString(), ListingDTO.class)
+                .getId();
+        mockMvc.perform(delete(HOST_LISTING_URI_PREFIX + "/" + listingId)
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andReturn();
+        MvcResult getMyListingsResult = performGetHostListings();
+        var myListings = objectMapper.readValue(getMyListingsResult.getResponse().getContentAsString(),
+                new TypeReference<List<ListingLightDTO>>() {
+                });
+        assertEquals(0, listingRepository.findAll().size());
+        assertEquals(0, bedroomRepository.findAll().size());
+        assertEquals(0, listingAmenityRepository.findAll().size());
+        assertEquals(0, myListings.size());
+    }
+
+    private MvcResult performCreateListing(ListingCreateRequestDTO requestDTO) throws Exception {
+        return mockMvc.perform(post(HOST_LISTING_URI_PREFIX)
+                        .with(csrf())
+                        .content(objectMapper.writeValueAsString(requestDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
+    }
+
+    private MvcResult performGetHostListings() throws Exception {
+        return mockMvc.perform(get(HOST_LISTING_URI_PREFIX)
+                        .with(csrf())
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andReturn();
     }
 
     private void simulateHostUser() {
         User user = new User();
         user.setFirstName(RandomStringUtils.randomAlphabetic(5));
         user.setLastName(RandomStringUtils.randomAlphabetic(5));
-        user.setEmail("testuser@example.com");
-        user.setPassword(RandomStringUtils.randomAlphanumeric(10)); // Normally, this would be encoded
+        user.setEmail(RandomStringUtils.randomAlphanumeric(5));
+        user.setPassword(RandomStringUtils.randomAlphanumeric(10));
         user.setRole(UserRole.HOST);
         user.setId(UUID.randomUUID());
         user.setCreationDate(ZonedDateTime.now());

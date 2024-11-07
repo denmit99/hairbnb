@@ -19,8 +19,10 @@ import java.util.Set;
 @ListingSearchRequest
 public class ListingSearchRequestDTO extends PaginationRequest {
     @Min(1)
+    @Max(Integer.MAX_VALUE)
     private Long minPrice;
 
+    @Min(1)
     @Max(Integer.MAX_VALUE)
     private Long maxPrice;
 

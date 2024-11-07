@@ -38,7 +38,7 @@ public class ListingController {
     }
 
     @GetMapping("/{id}")
-    public ListingDTO get(@PathVariable("id") @ListingIdExists UUID listingId) {
+    public ListingDTO getById(@PathVariable("id") @ListingIdExists UUID listingId) {
         return conversionService.convert(listingService.get(listingId), ListingDTO.class);
     }
 }
