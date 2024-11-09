@@ -3,7 +3,6 @@ package com.denmit99.hairbnb.validation;
 import com.denmit99.hairbnb.repository.ListingRepository;
 import jakarta.validation.ConstraintValidator;
 import jakarta.validation.ConstraintValidatorContext;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.util.UUID;
@@ -13,8 +12,11 @@ public class ListingIdExistsValidator implements ConstraintValidator<ListingIdEx
 
     private static final String MESSAGE = "Listing with id %s does not exist";
 
-    @Autowired
-    private ListingRepository listingRepository;
+    private final ListingRepository listingRepository;
+
+    public ListingIdExistsValidator(ListingRepository listingRepository) {
+        this.listingRepository = listingRepository;
+    }
 
     @Override
     public boolean isValid(UUID listingId, ConstraintValidatorContext context) {

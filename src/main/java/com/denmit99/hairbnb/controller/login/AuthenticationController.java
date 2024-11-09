@@ -10,7 +10,6 @@ import com.denmit99.hairbnb.model.dto.auth.RefreshTokenRequestDTO;
 import com.denmit99.hairbnb.model.dto.auth.RegisterRequestDTO;
 import com.denmit99.hairbnb.service.AuthenticationService;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.http.HttpHeaders;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -23,11 +22,15 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/auth")
 public class AuthenticationController {
 
-    @Autowired
-    private AuthenticationService authenticationService;
+    private final AuthenticationService authenticationService;
 
-    @Autowired
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
+
+    public AuthenticationController(AuthenticationService authenticationService,
+                                    ConversionService conversionService) {
+        this.authenticationService = authenticationService;
+        this.conversionService = conversionService;
+    }
 
     @PostMapping("/login")
     public AuthenticationResponseDTO login(@Valid @RequestBody LoginRequestDTO requestDTO) {

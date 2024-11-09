@@ -4,7 +4,6 @@ import com.denmit99.hairbnb.model.AmenityType;
 import com.denmit99.hairbnb.model.entity.ListingAmenity;
 import com.denmit99.hairbnb.repository.ListingAmenityRepository;
 import com.denmit99.hairbnb.service.ListingAmenityService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -14,8 +13,11 @@ import java.util.UUID;
 @Service
 public class ListingAmenityServiceImpl implements ListingAmenityService {
 
-    @Autowired
-    private ListingAmenityRepository repository;
+    private final ListingAmenityRepository repository;
+
+    public ListingAmenityServiceImpl(ListingAmenityRepository repository) {
+        this.repository = repository;
+    }
 
     @Override
     public List<ListingAmenity> save(UUID listingId, Set<AmenityType> amenities) {

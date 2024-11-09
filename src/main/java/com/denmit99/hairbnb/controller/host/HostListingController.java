@@ -9,7 +9,6 @@ import com.denmit99.hairbnb.service.ListingService;
 import com.denmit99.hairbnb.service.UserService;
 import com.denmit99.hairbnb.validation.ListingIdExists;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -26,14 +25,19 @@ import java.util.UUID;
 @RequestMapping("/host/listings")
 public class HostListingController {
 
-    @Autowired
-    private ListingService listingService;
+    private final ListingService listingService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
+
+    public HostListingController(ListingService listingService,
+                                 UserService userService,
+                                 ConversionService conversionService) {
+        this.listingService = listingService;
+        this.userService = userService;
+        this.conversionService = conversionService;
+    }
 
     @PostMapping
     public ListingDTO create(@Valid @RequestBody ListingCreateRequestDTO requestDTO) {

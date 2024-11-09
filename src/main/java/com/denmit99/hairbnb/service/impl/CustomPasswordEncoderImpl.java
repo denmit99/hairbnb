@@ -1,15 +1,17 @@
 package com.denmit99.hairbnb.service.impl;
 
 import com.denmit99.hairbnb.service.CustomPasswordEncoder;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class CustomPasswordEncoderImpl implements CustomPasswordEncoder {
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
+    private final PasswordEncoder passwordEncoder;
+
+    public CustomPasswordEncoderImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public String encode(String str) {

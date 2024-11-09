@@ -165,7 +165,7 @@ public class ListingControllerTest {
     }
 
     @Test
-    @WithMockUser(roles = "USER")
+    @WithMockUser
     void getById_NonExisting_Returns4xxCode() throws Exception {
         UUID listingId = UUID.randomUUID();
         when(listingRepository.existsById(listingId)).thenReturn(false);

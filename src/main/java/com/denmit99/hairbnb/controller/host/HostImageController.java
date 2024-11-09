@@ -1,7 +1,6 @@
 package com.denmit99.hairbnb.controller.host;
 
 import com.denmit99.hairbnb.service.FileStorageService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -15,8 +14,11 @@ import java.io.IOException;
 @RequestMapping("/host/image")
 public class HostImageController {
 
-    @Autowired
-    private FileStorageService fileStorageService;
+    private final FileStorageService fileStorageService;
+
+    public HostImageController(FileStorageService fileStorageService) {
+        this.fileStorageService = fileStorageService;
+    }
 
     @PostMapping(value = "/upload", consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public void uploadFile(@RequestParam("file") MultipartFile file) {

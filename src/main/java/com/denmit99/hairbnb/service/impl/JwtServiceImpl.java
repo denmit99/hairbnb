@@ -7,7 +7,6 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
@@ -21,17 +20,23 @@ import java.util.function.Function;
 @Service
 public class JwtServiceImpl implements JwtService {
 
-    @Value("${app.jwt.secret}")
-    private String secretKey;
+    private final String secretKey;
 
-    @Value("${app.jwt.expiration}")
-    private Duration expiration;
+    private final Duration expiration;
 
-    @Value("${app.jwt.refresh-expiration}")
-    private Duration refreshExpiration;
+    private final Duration refreshExpiration;
 
-    @Autowired
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
+
+    public JwtServiceImpl(@Value("${app.jwt.secret}") String secretKey,
+                          @Value("${app.jwt.expiration}") Duration expiration,
+                          @Value("${app.jwt.refresh-expiration}") Duration refreshExpiration,
+                          ConversionService conversionService) {
+        this.secretKey = secretKey;
+        this.expiration = expiration;
+        this.refreshExpiration = refreshExpiration;
+        this.conversionService = conversionService;
+    }
 
     @Override
     public String extractEmail(String token) {

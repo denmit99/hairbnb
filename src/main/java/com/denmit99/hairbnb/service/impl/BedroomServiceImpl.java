@@ -5,7 +5,6 @@ import com.denmit99.hairbnb.model.bo.BedroomListingCreateRequestBO;
 import com.denmit99.hairbnb.model.entity.Bedroom;
 import com.denmit99.hairbnb.repository.BedroomRepository;
 import com.denmit99.hairbnb.service.BedroomService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
@@ -17,11 +16,14 @@ import java.util.UUID;
 @Service
 public class BedroomServiceImpl implements BedroomService {
 
-    @Autowired
-    private BedroomRepository bedroomRepository;
+    private final BedroomRepository bedroomRepository;
 
-    @Autowired
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
+
+    public BedroomServiceImpl(BedroomRepository bedroomRepository, ConversionService conversionService) {
+        this.bedroomRepository = bedroomRepository;
+        this.conversionService = conversionService;
+    }
 
     @Override
     public List<BedroomBO> save(UUID listingId, List<BedroomListingCreateRequestBO> bedrooms) {

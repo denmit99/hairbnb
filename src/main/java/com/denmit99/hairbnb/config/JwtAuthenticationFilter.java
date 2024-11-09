@@ -8,8 +8,6 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.lang.NonNull;
 import org.springframework.security.access.AccessDeniedException;
@@ -22,21 +20,26 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import java.io.IOException;
 
 @Component
-@RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private static final String BEARER_PREFIX = "Bearer ";
 
-    @Autowired
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private TokenInfoService tokenInfoService;
+    private final TokenInfoService tokenInfoService;
 
-    @Autowired
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
+
+    public JwtAuthenticationFilter(JwtService jwtService,
+                                   UserService userService,
+                                   TokenInfoService tokenInfoService,
+                                   ConversionService conversionService) {
+        this.jwtService = jwtService;
+        this.userService = userService;
+        this.tokenInfoService = tokenInfoService;
+        this.conversionService = conversionService;
+    }
 
     @Override
     protected void doFilterInternal(HttpServletRequest request,

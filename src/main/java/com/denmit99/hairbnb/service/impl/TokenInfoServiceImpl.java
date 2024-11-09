@@ -3,7 +3,6 @@ package com.denmit99.hairbnb.service.impl;
 import com.denmit99.hairbnb.model.entity.TokenInfo;
 import com.denmit99.hairbnb.repository.TokenInfoRepository;
 import com.denmit99.hairbnb.service.TokenInfoService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
@@ -11,8 +10,11 @@ import java.util.UUID;
 @Service
 public class TokenInfoServiceImpl implements TokenInfoService {
 
-    @Autowired
-    private TokenInfoRepository tokenInfoRepository;
+    private final TokenInfoRepository tokenInfoRepository;
+
+    public TokenInfoServiceImpl(TokenInfoRepository tokenInfoRepository) {
+        this.tokenInfoRepository = tokenInfoRepository;
+    }
 
     @Override
     public TokenInfo findByJWT(String token) {

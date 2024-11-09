@@ -13,7 +13,6 @@ import com.denmit99.hairbnb.service.CustomPasswordEncoder;
 import com.denmit99.hairbnb.service.JwtService;
 import com.denmit99.hairbnb.service.TokenInfoService;
 import com.denmit99.hairbnb.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -23,20 +22,27 @@ import java.time.ZonedDateTime;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private CustomPasswordEncoder passwordEncoder;
+    private final CustomPasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtService jwtService;
+    private final JwtService jwtService;
 
-    @Autowired
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
 
-    @Autowired
-    private TokenInfoService tokenService;
+    private final TokenInfoService tokenService;
+
+    public AuthenticationServiceImpl(UserService userService,
+                                     CustomPasswordEncoder passwordEncoder,
+                                     JwtService jwtService,
+                                     ConversionService conversionService,
+                                     TokenInfoService tokenService) {
+        this.userService = userService;
+        this.passwordEncoder = passwordEncoder;
+        this.jwtService = jwtService;
+        this.conversionService = conversionService;
+        this.tokenService = tokenService;
+    }
 
     @Override
     public RegisterResponseBO register(RegisterRequestBO requestBO) {

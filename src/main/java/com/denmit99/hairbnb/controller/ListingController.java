@@ -7,7 +7,6 @@ import com.denmit99.hairbnb.model.dto.ListingSearchRequestDTO;
 import com.denmit99.hairbnb.service.ListingService;
 import com.denmit99.hairbnb.validation.ListingIdExists;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -23,11 +22,15 @@ import java.util.UUID;
 @RequestMapping("/listings")
 public class ListingController {
 
-    @Autowired
-    private ListingService listingService;
+    private final ListingService listingService;
 
-    @Autowired
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
+
+    public ListingController(ListingService listingService,
+                             ConversionService conversionService) {
+        this.listingService = listingService;
+        this.conversionService = conversionService;
+    }
 
     @PostMapping
     public List<ListingLightDTO> search(@Valid @RequestBody ListingSearchRequestDTO requestDTO) {

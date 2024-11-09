@@ -4,7 +4,6 @@ import com.denmit99.hairbnb.model.entity.File;
 import com.denmit99.hairbnb.repository.FileRepository;
 import com.denmit99.hairbnb.service.FileStorageService;
 import com.denmit99.hairbnb.service.UserService;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
@@ -18,11 +17,14 @@ public class FileStorageServiceImpl implements FileStorageService {
 
     private static final String DEFAULT_FILE_NAME = "untitled";
 
-    @Autowired
-    private FileRepository fileRepository;
+    private final FileRepository fileRepository;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
+
+    public FileStorageServiceImpl(FileRepository fileRepository, UserService userService) {
+        this.fileRepository = fileRepository;
+        this.userService = userService;
+    }
 
     @Override
     public void upload(MultipartFile file) throws IOException {

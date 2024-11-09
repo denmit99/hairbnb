@@ -20,7 +20,6 @@ import com.denmit99.hairbnb.service.ListingService;
 import com.denmit99.hairbnb.service.UserService;
 import com.denmit99.hairbnb.service.converter.ListingToListingBOConverter;
 import org.apache.logging.log4j.util.Strings;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.jpa.domain.Specification;
@@ -41,26 +40,35 @@ public class ListingServiceImpl implements ListingService {
 
     private static final double HUNDRED = 100.0;
 
-    @Autowired
-    private ListingRepository listingRepository;
+    private final ListingRepository listingRepository;
 
-    @Autowired
-    private BedroomService bedroomService;
+    private final BedroomService bedroomService;
 
-    @Autowired
-    private ListingAmenityService listingAmenityService;
+    private final ListingAmenityService listingAmenityService;
 
-    @Autowired
-    private UserService userService;
+    private final UserService userService;
 
-    @Autowired
-    private ConversionService conversionService;
+    private final ConversionService conversionService;
 
-    @Autowired
-    private ListingToListingBOConverter listingToListingBOConverter;
+    private final ListingToListingBOConverter listingToListingBOConverter;
 
-    @Autowired
-    private CurrencyConverter currencyConverter;
+    private final CurrencyConverter currencyConverter;
+
+    public ListingServiceImpl(ListingRepository listingRepository,
+                              BedroomService bedroomService,
+                              ListingAmenityService listingAmenityService,
+                              UserService userService,
+                              ConversionService conversionService,
+                              ListingToListingBOConverter listingToListingBOConverter,
+                              CurrencyConverter currencyConverter) {
+        this.listingRepository = listingRepository;
+        this.bedroomService = bedroomService;
+        this.listingAmenityService = listingAmenityService;
+        this.userService = userService;
+        this.conversionService = conversionService;
+        this.listingToListingBOConverter = listingToListingBOConverter;
+        this.currencyConverter = currencyConverter;
+    }
 
     @Transactional
     @Override
