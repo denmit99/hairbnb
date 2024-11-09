@@ -1,5 +1,6 @@
 package com.denmit99.hairbnb.controller.host;
 
+import com.denmit99.hairbnb.config.SecurityConfiguration;
 import com.denmit99.hairbnb.model.AmenityType;
 import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.model.PlaceType;
@@ -22,7 +23,9 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithAnonymousUser;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultMatcher;
@@ -42,6 +45,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @ExtendWith(MockitoExtension.class)
 @WebMvcTest(HostListingController.class)
+@Import(SecurityConfiguration.class)
 public class HostListingControllerTest {
 
     private static final String HOST_LISTING_URI_PREFIX = "/host/listings";
@@ -150,9 +154,10 @@ public class HostListingControllerTest {
     }
 
     @Test
-    void create_Unauthorized_Returns401Code() throws Exception {
+    @WithAnonymousUser
+    void create_Unauthorized_Returns403Code() throws Exception {
         testCreateRequestDtoValidation(dto -> {
-        }, status().isUnauthorized());
+        }, status().isForbidden());
     }
 
     @Test
@@ -179,11 +184,12 @@ public class HostListingControllerTest {
     }
 
     @Test
-    void delete_Unauthorized_Returns401Code() throws Exception {
+    @WithAnonymousUser
+    void delete_Unauthorized_Returns403Code() throws Exception {
         mockMvc.perform(delete(HOST_LISTING_URI_PREFIX + "/" + RandomUtils.nextLong())
                         .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 
     @Test
@@ -203,10 +209,11 @@ public class HostListingControllerTest {
     }
 
     @Test
-    void getAll_Unauthorized_Returns401Code() throws Exception {
+    @WithAnonymousUser
+    void getAll_Unauthorized_Returns403Code() throws Exception {
         mockMvc.perform(get(HOST_LISTING_URI_PREFIX)
                         .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isForbidden());
     }
 
     private void testCreateRequestDtoValidation(Consumer<ListingCreateRequestDTO> dtoModifier,
