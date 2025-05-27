@@ -17,6 +17,19 @@ public final class ListingSpecification {
     private ListingSpecification() {
     }
 
+    public static Specification<Listing> inCityContaining(String citySubstring) {
+        return (root, query, builder) -> {
+            if (citySubstring == null || citySubstring.isBlank()) {
+                return builder.conjunction();
+            }
+
+            return builder.like(
+                    builder.lower(root.get("city")),
+                    "%" + citySubstring.toLowerCase() + "%"
+            );
+        };
+    }
+
     public static Specification<Listing> hasAmenities(Set<AmenityType> amenities) {
         return (root, query, builder) -> {
             if (amenities == null || amenities.isEmpty()) {

@@ -13,6 +13,7 @@ public class ListingSearchRequestDTOToBOConverter
         return ListingSearchRequestBO.builder()
                 .minPrice(source.getMinPrice())
                 .maxPrice(source.getMaxPrice())
+                .citySubstring(source.getCitySubstring())
                 .currency(source.getCurrency())
                 .propertyTypes(source.getPropertyTypes())
                 .placeTypes(source.getPlaceTypes())

@@ -18,6 +18,8 @@ public class ListingSearchRequestBO {
 
     private Long maxPrice;
 
+    private String citySubstring;
+
     private Currency currency;
 
     private List<PropertyType> propertyTypes;

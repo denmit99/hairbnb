@@ -147,13 +147,14 @@ public class ListingServiceImpl implements ListingService {
                 .and(ListingSpecification.hasBathrooms(requestBO.getNumberOfBathrooms()))
                 .and(ListingSpecification.hasPropertyType(requestBO.getPropertyTypes()))
                 .and(ListingSpecification.hasPlaceType(requestBO.getPlaceTypes()))
-                .and(ListingSpecification.hasBedrooms(requestBO.getNumberOfBedrooms()));
+                .and(ListingSpecification.hasBedrooms(requestBO.getNumberOfBedrooms()))
+                .and(ListingSpecification.inCityContaining(requestBO.getCitySubstring()));
         return listingRepository
                 .findAll(specification, PageRequest.of(requestBO.getPage(), requestBO.getPageSize()))
                 .stream()
                 .map(l -> {
                     ListingLightBO listingBO = conversionService.convert(l, ListingLightBO.class);
-                    convertPriceToUsersCurrency(requestBO.getCurrency(), listingBO);
+                    convertPriceToUsersCurrency(Optional.ofNullable(requestBO.getCurrency()).orElse(Currency.EUR), listingBO);
                     return listingBO;
                 })
                 .toList();

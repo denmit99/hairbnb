@@ -46,6 +46,6 @@ public class ListingSearchRequestDTO extends PaginationRequest {
 
     private Set<AmenityType> amenities;
 
-    //TODO city
+    private String citySubstring;
 
 }
