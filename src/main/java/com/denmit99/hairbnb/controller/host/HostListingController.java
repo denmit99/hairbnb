@@ -10,6 +10,8 @@ import com.denmit99.hairbnb.service.UserService;
 import com.denmit99.hairbnb.validation.ListingIdExists;
 import jakarta.validation.Valid;
 import org.springframework.core.convert.ConversionService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -40,9 +42,9 @@ public class HostListingController {
     }
 
     @PostMapping
-    public ListingDTO create(@Valid @RequestBody ListingCreateRequestDTO requestDTO) {
+    public ResponseEntity<ListingDTO> create(@Valid @RequestBody ListingCreateRequestDTO requestDTO) {
         ListingBO res = listingService.create(conversionService.convert(requestDTO, ListingCreateRequestBO.class));
-        return conversionService.convert(res, ListingDTO.class);
+        return new ResponseEntity<>(conversionService.convert(res, ListingDTO.class), HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")

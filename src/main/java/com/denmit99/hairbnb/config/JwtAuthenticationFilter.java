@@ -1,5 +1,6 @@
 package com.denmit99.hairbnb.config;
 
+import com.denmit99.hairbnb.constants.Headers;
 import com.denmit99.hairbnb.model.UserToken;
 import com.denmit99.hairbnb.service.JwtService;
 import com.denmit99.hairbnb.service.TokenInfoService;
@@ -46,7 +47,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain chain)
             throws ServletException, IOException {
-        String authHeader = request.getHeader("Authorization");
+        String authHeader = request.getHeader(Headers.AUTHORIZATION);
         if (authHeader == null || !authHeader.startsWith(BEARER_PREFIX)) {
             chain.doFilter(request, response);
             return;
