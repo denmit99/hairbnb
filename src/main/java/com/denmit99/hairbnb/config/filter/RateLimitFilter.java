@@ -1,4 +1,4 @@
-package com.denmit99.hairbnb.config;
+package com.denmit99.hairbnb.config.filter;
 
 import com.denmit99.hairbnb.constants.Headers;
 import jakarta.servlet.FilterChain;
@@ -11,19 +11,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
-import java.time.Duration;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.TimeUnit;
 
 @Component
 public class RateLimitFilter extends OncePerRequestFilter {
-
-    //TODO move to properties
-    private static final int BUCKET_CAPACITY = 5;
-
-    private static final Duration REFILL_RATE = Duration.ofMinutes(1);
 
     private static final String TOKENS_FIELD = "tokens";
 
@@ -31,8 +24,12 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
     private final RedisTemplate<String, String> redisTemplate;
 
-    public RateLimitFilter(RedisTemplate<String, String> redisTemplate) {
+    private final RateLimiterProperties rateLimiterProps;
+
+    public RateLimitFilter(RedisTemplate<String, String> redisTemplate,
+                           RateLimiterProperties rateLimiterProps) {
         this.redisTemplate = redisTemplate;
+        this.rateLimiterProps = rateLimiterProps;
     }
 
     @Override
@@ -42,24 +39,27 @@ public class RateLimitFilter extends OncePerRequestFilter {
         String ip = getIp(request);
 
         var fields = redisTemplate.opsForHash().multiGet(ip, List.of(TOKENS_FIELD, LAST_REFILL_FIELD));
-        int tokens = Optional.ofNullable((Integer) fields.get(0)).orElse(BUCKET_CAPACITY);
+        long tokens = Optional.ofNullable((Long) fields.get(0)).orElse(rateLimiterProps.getBucketCapacity());
         long lastRefill = Optional.ofNullable((Long) fields.get(1)).orElse(now);
-        long sinceLastRefill = now - lastRefill;
+        long elapsedTime = now - lastRefill;
+        long tokensToAdd = elapsedTime / rateLimiterProps.getRefillPeriod().toMillis()
+                * rateLimiterProps.getRefillRate();
 
-        if (sinceLastRefill > REFILL_RATE.toMillis() && tokens < BUCKET_CAPACITY) {
-            tokens = BUCKET_CAPACITY;
+        // Only update lastRefill if tokens were actually added
+        if (tokensToAdd > 0 && tokens < rateLimiterProps.getBucketCapacity()) {
+            tokens = Math.min(rateLimiterProps.getBucketCapacity(), tokens + tokensToAdd);
             lastRefill = now;
         }
 
         if (tokens > 0) {
             tokens--;
         } else {
-            long waitForRefill = (REFILL_RATE.toMillis() - sinceLastRefill) / TimeUnit.SECONDS.toMillis(1);
+            long waitForRefill = (rateLimiterProps.getRefillPeriod().toMillis() - elapsedTime) / 1000;
             response.setHeader(Headers.X_RATE_LIMIT_RETRY_AFTER, String.valueOf(waitForRefill));
             response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
         }
         redisTemplate.opsForHash().putAll(ip, Map.of(TOKENS_FIELD, tokens, LAST_REFILL_FIELD, lastRefill));
-        response.setHeader(Headers.X_RATE_LIMIT_LIMIT, String.valueOf(BUCKET_CAPACITY));
+        response.setHeader(Headers.X_RATE_LIMIT_LIMIT, String.valueOf(rateLimiterProps.getBucketCapacity()));
         response.setHeader(Headers.X_RATE_LIMIT_REMAINING, String.valueOf(tokens));
 
         filterChain.doFilter(request, response);

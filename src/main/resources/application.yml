@@ -16,6 +16,11 @@ app:
     expiration: 1d
     refresh-expiration: 7d
 
+rate-limiter:
+  bucket-capacity: 100
+  refill-rate: 10
+  refill-period: 1s
+
 logging.level.org.springframework.web: DEBUG
 logging.level.org.hibernate: ERROR
 logging.level.org.springframework.security: TRACE

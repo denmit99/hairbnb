@@ -1,5 +1,7 @@
 package com.denmit99.hairbnb.config;
 
+import com.denmit99.hairbnb.config.filter.JwtAuthenticationFilter;
+import com.denmit99.hairbnb.config.filter.RateLimitFilter;
 import com.denmit99.hairbnb.model.UserRole;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

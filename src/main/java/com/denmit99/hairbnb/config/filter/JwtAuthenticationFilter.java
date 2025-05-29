@@ -1,4 +1,4 @@
-package com.denmit99.hairbnb.config;
+package com.denmit99.hairbnb.config.filter;
 
 import com.denmit99.hairbnb.constants.Headers;
 import com.denmit99.hairbnb.model.UserToken;
