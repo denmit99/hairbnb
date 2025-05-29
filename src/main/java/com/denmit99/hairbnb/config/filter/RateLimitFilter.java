@@ -22,6 +22,8 @@ public class RateLimitFilter extends OncePerRequestFilter {
 
     private static final String LAST_REFILL_FIELD = "lastRefill";
 
+    private static final String KEY_PREFIX = "rate_limit";
+
     private final RedisTemplate<String, String> redisTemplate;
 
     private final RateLimiterProperties rateLimiterProps;
@@ -36,9 +38,9 @@ public class RateLimitFilter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         long now = System.currentTimeMillis();
-        String ip = getIp(request);
+        String key = KEY_PREFIX + ":" + getIp(request);
 
-        var fields = redisTemplate.opsForHash().multiGet(ip, List.of(TOKENS_FIELD, LAST_REFILL_FIELD));
+        var fields = redisTemplate.opsForHash().multiGet(key, List.of(TOKENS_FIELD, LAST_REFILL_FIELD));
         long tokens = Optional.ofNullable((Long) fields.get(0)).orElse(rateLimiterProps.getBucketCapacity());
         long lastRefill = Optional.ofNullable((Long) fields.get(1)).orElse(now);
         long elapsedTime = now - lastRefill;
@@ -58,7 +60,7 @@ public class RateLimitFilter extends OncePerRequestFilter {
             response.setHeader(Headers.X_RATE_LIMIT_RETRY_AFTER, String.valueOf(waitForRefill));
             response.setStatus(HttpStatus.TOO_MANY_REQUESTS.value());
         }
-        redisTemplate.opsForHash().putAll(ip, Map.of(TOKENS_FIELD, tokens, LAST_REFILL_FIELD, lastRefill));
+        redisTemplate.opsForHash().putAll(key, Map.of(TOKENS_FIELD, tokens, LAST_REFILL_FIELD, lastRefill));
         response.setHeader(Headers.X_RATE_LIMIT_LIMIT, String.valueOf(rateLimiterProps.getBucketCapacity()));
         response.setHeader(Headers.X_RATE_LIMIT_REMAINING, String.valueOf(tokens));
 
