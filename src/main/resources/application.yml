@@ -16,6 +16,12 @@ app:
     expiration: 1d
     refresh-expiration: 7d
 
+exchange-rate:
+  # Update once a day at midnight
+  cron: "0 0 0 * * *"
+  api:
+    url: https://api.frankfurter.dev
+
 rate-limiter:
   bucket-capacity: 100
   refill-rate: 10
