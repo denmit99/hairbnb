@@ -64,6 +64,7 @@ public class Listing {
     @Enumerated(EnumType.STRING)
     private Currency currency;
 
+    //TODO change to EUR
     @Column(name = "price_usd")
     private Double pricePerNightUsd;
 

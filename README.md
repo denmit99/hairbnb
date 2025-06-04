@@ -25,6 +25,8 @@ The **_frontend_** repository can be found here https://github.com/denmit99/hair
 
 `docker compose --profile api up -d ` Start only backend + database
 
+`docker compose --profile infra up -d ` Start only infrastructure (redis + database)
+
 `docker compose --profile all up -d --build`  Rebuild all services and then start containers
 
 ---

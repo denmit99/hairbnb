@@ -33,7 +33,7 @@ public class CustomExceptionHandler {
     //TODO add functionality to use custom http code in constraint validation annotations (e.g. @ListingIdExists)
     @ExceptionHandler(value = {HandlerMethodValidationException.class})
     public ResponseEntity<Object> methodValidationException(HandlerMethodValidationException ex) {
-        var msg = ex.getAllValidationResults().getFirst().getResolvableErrors().getFirst().getDefaultMessage();
+        var msg = ex.getParameterValidationResults().getFirst().getResolvableErrors().getFirst().getDefaultMessage();
         ErrorMessage error = new ErrorMessage("invalid.request", msg);
         return new ResponseEntity<>(error, HttpStatus.BAD_REQUEST);
     }

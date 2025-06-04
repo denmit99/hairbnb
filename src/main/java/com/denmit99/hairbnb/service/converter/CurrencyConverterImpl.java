@@ -2,30 +2,33 @@ package com.denmit99.hairbnb.service.converter;
 
 import com.denmit99.hairbnb.model.Currency;
 import com.denmit99.hairbnb.service.CurrencyConverter;
+import com.denmit99.hairbnb.service.ExchangeRateService;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 @Component
 public class CurrencyConverterImpl implements CurrencyConverter {
-    //default currency: USD, rates as of 25.09.24
-    //TODO update current rates daily and recalculate price in usd
-    private static final Map<Currency, Double> RATES = Map.of(
-            Currency.EUR, 1.11,
-            Currency.GBP, 1.33,
-            Currency.CNY, 0.14,
-            Currency.JPY, 0.0069
-    );
+
+    private final ExchangeRateService exchangeRateService;
+
+    public CurrencyConverterImpl(ExchangeRateService exchangeRateService) {
+        this.exchangeRateService = exchangeRateService;
+    }
 
     @Override
     public double convertToDefault(double amount, Currency currency) {
-        double exchangeRate = RATES.get(currency);
-        return amount * exchangeRate;
+        if (currency == Currency.getDefault()) {
+            return amount;
+        }
+        BigDecimal exchangeRate = exchangeRateService.getLatest(currency);
+        return BigDecimal.valueOf(amount).divide(exchangeRate, RoundingMode.HALF_UP).doubleValue();
     }
 
     @Override
     public double convertFromDefault(double amount, Currency currency) {
-        double exchangeRate = RATES.get(currency);
-        return amount / exchangeRate;
+        BigDecimal exchangeRate = exchangeRateService.getLatest(currency);
+        return BigDecimal.valueOf(amount).multiply(exchangeRate).doubleValue();
     }
 }
