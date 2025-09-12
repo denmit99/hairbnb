@@ -38,7 +38,6 @@ public class UserServiceImpl implements UserService {
     public UserBO create(UserCreateRequestBO createRequestBO) {
         var now = ZonedDateTime.now();
         User user = User.builder()
-                .id(UUID.randomUUID())
                 .firstName(createRequestBO.getFirstName())
                 .lastName(createRequestBO.getLastName())
                 .email(createRequestBO.getEmail())

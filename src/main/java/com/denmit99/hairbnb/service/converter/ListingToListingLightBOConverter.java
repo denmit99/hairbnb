@@ -16,7 +16,7 @@ public class ListingToListingLightBOConverter implements Converter<Listing, List
                 .address(String.join(" ", source.getZipCode(), source.getHouseNumber(), source.getStreet(),
                         source.getCity(), source.getCountry()))
                 .pricePerNight(source.getPricePerNight())
-                .pricePerNightUsd(source.getPricePerNightUsd())
+                .pricePerNightEuro(source.getPricePerNightUsd())
                 .currency(source.getCurrency())
                 .propertyType(source.getPropertyType())
                 .placeType(source.getPlaceType())

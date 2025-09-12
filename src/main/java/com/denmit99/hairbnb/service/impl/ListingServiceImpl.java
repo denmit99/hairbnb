@@ -169,7 +169,7 @@ public class ListingServiceImpl implements ListingService {
     }
 
     private void convertPriceToUsersCurrency(Currency currency, ListingLightBO listingBO) {
-        var priceConverted = currencyConverter.convertFromDefault(listingBO.getPricePerNightUsd(), currency);
+        var priceConverted = currencyConverter.convertFromDefault(listingBO.getPricePerNightEuro(), currency);
         var priceRounded = Math.round(priceConverted * HUNDRED) / HUNDRED;
         listingBO.setPricePerNight(priceRounded);
         listingBO.setCurrency(currency);

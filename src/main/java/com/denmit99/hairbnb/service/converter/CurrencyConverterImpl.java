@@ -28,6 +28,9 @@ public class CurrencyConverterImpl implements CurrencyConverter {
 
     @Override
     public double convertFromDefault(double amount, Currency currency) {
+        if (currency == Currency.getDefault()) {
+            return amount;
+        }
         BigDecimal exchangeRate = exchangeRateService.getLatest(currency);
         return BigDecimal.valueOf(amount).multiply(exchangeRate).doubleValue();
     }

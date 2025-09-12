@@ -26,7 +26,7 @@ public class ListingLightBO {
 
     private Double pricePerNight;
 
-    private Double pricePerNightUsd;
+    private Double pricePerNightEuro;
 
     private Currency currency;
 
