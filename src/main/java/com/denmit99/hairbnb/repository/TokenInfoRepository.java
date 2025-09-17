@@ -15,4 +15,6 @@ public interface TokenInfoRepository extends JpaRepository<TokenInfo, UUID> {
     List<TokenInfo> findAll(UUID userId);
 
     List<TokenInfo> findByToken(String token);
+
+    List<TokenInfo> findByRefreshToken(String token);
 }

@@ -23,7 +23,7 @@ services:
       POSTGRES_DB: hairbnb
     profiles: [api, infra, all]
   front:
-    image: denmit99/hairbnb-front:0.0.1
+    image: denmit99/hairbnb-front:latest
     ports:
       - 3000:3000
     profiles: [frontend, all]

@@ -12,7 +12,6 @@ public class RegisterResponseBOToAuthenticationResponseDTOConverter
     public AuthenticationResponseDTO convert(RegisterResponseBO source) {
         return AuthenticationResponseDTO.builder()
                 .token(source.getToken())
-                .refreshToken(source.getRefreshToken())
                 .build();
     }
 }

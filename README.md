@@ -10,11 +10,12 @@
 
 ---
 
-## Tech stack
+## Tech Stack
 
 * **Back-End:** Java + Spring Boot
 * **Front-End:** React + Typescript
 * **Database:** PostgreSQL
+* **Caching:** Redis
 
 The **_frontend_** repository can be found here https://github.com/denmit99/hairbnb-front
 
@@ -31,12 +32,21 @@ The **_frontend_** repository can be found here https://github.com/denmit99/hair
 
 ---
 
+## Development
+When developing locally, make sure to activate the `dev` profile.
+
+Set environment variable in Intellij: `SPRING_PROFILES_ACTIVE=dev`
+
+---
+
+### Jacoco test coverage
+`./gradlew clean build jacocoTestReport`
+
+Report can be found be in `build/reports/jacocoHtml`
+
+---
+
 ## API Docs
 https://available-mechanic-6c2.notion.site/HairBnb-API-Documentation-10c12d058faa809d902cd772c4e1f535
 
 ---
-
-## Jacoco test coverage
-`./gradlew clean build jacocoTestReport`
-
-Report can be found be in `build/reports/jacocoHtml`

@@ -22,6 +22,11 @@ public class TokenInfoServiceImpl implements TokenInfoService {
     }
 
     @Override
+    public TokenInfo findByRefreshToken(String token) {
+        return tokenInfoRepository.findByRefreshToken(token).get(0);
+    }
+
+    @Override
     public void revokeAll(UUID userId) {
         var validTokens = tokenInfoRepository.findAll(userId);
         validTokens.forEach(t -> {
