@@ -7,6 +7,8 @@ import java.util.UUID;
 public interface TokenInfoService {
     TokenInfo findByJWT(String token);
 
+    TokenInfo findByRefreshToken(String token);
+
     void revokeAll(UUID userId);
 
     void create(UUID userId, String token, String refreshToken);

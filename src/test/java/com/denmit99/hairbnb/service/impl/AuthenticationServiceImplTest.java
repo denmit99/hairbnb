@@ -79,64 +79,36 @@ public class AuthenticationServiceImplTest {
 
     @Test
     void refreshToken_TokenNotFound_ThrowsException() {
-        var accessToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         var refreshToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
-        when(tokenService.findByJWT(accessToken)).thenReturn(null);
+        when(tokenService.findByRefreshToken(refreshToken)).thenReturn(null);
 
-        assertThrows(NotFoundException.class, () -> service.refreshToken(accessToken, refreshToken));
+        assertThrows(AccessDeniedException.class, () -> service.refreshToken(refreshToken));
     }
 
     @Test
     void refreshToken_InvalidToken_ThrowsException() {
-        var accessToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         var refreshToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
-        when(tokenService.findByJWT(accessToken)).thenReturn(mock(TokenInfo.class));
-        when(jwtService.isValid(accessToken)).thenReturn(false);
+        when(tokenService.findByRefreshToken(refreshToken)).thenReturn(mock(TokenInfo.class));
+        when(jwtService.isValid(refreshToken)).thenReturn(false);
 
-        assertThrows(NotFoundException.class, () -> service.refreshToken(accessToken, refreshToken));
-    }
-
-    @Test
-    void refreshToken_DifferentRefreshToken_ThrowsException() {
-        var accessToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
-        var refreshToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
-        var tokenInfo = TokenInfo.builder()
-                .refreshToken(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE - 1))
-                .build();
-        when(tokenService.findByJWT(accessToken)).thenReturn(tokenInfo);
-        when(jwtService.isValid(accessToken)).thenReturn(true);
-
-        assertThrows(AccessDeniedException.class, () -> service.refreshToken(accessToken, refreshToken));
-    }
-
-    @Test
-    void refreshToken_InvalidRefreshToken_ThrowsException() {
-        var accessToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
-        var refreshToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
-        var tokenInfo = TokenInfo.builder()
-                .refreshToken(RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE - 1))
-                .build();
-        when(tokenService.findByJWT(accessToken)).thenReturn(tokenInfo);
-        when(jwtService.isValid(accessToken)).thenReturn(true);
-
-        assertThrows(AccessDeniedException.class, () -> service.refreshToken(accessToken, refreshToken));
+        assertThrows(AccessDeniedException.class, () -> service.refreshToken(refreshToken));
     }
 
     @Test
     void refreshToken() {
-        var accessToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         var refreshToken = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
         var tokenInfo = TokenInfo.builder()
                 .refreshToken(refreshToken)
                 .build();
         var userId = UUID.randomUUID();
-        when(tokenService.findByJWT(accessToken)).thenReturn(tokenInfo);
-        when(jwtService.isValid(accessToken)).thenReturn(true);
+        when(tokenService.findByRefreshToken(refreshToken)).thenReturn(tokenInfo);
         when(jwtService.isValid(refreshToken)).thenReturn(true);
         var userBO = UserBO.builder()
                 .id(userId)
                 .build();
-        when(userService.getCurrent()).thenReturn(userBO);
+        var email = RandomStringUtils.randomAlphanumeric(DEFAULT_STRING_SIZE);
+        when(jwtService.extractEmail(refreshToken)).thenReturn(email);
+        when(userService.findByEmail(email)).thenReturn(userBO);
         UserToken userToken = new UserToken();
         when(conversionService.convert(userBO, UserToken.class))
                 .thenReturn(userToken);
@@ -145,7 +117,7 @@ public class AuthenticationServiceImplTest {
         when(jwtService.generate(userToken)).thenReturn(newToken);
         when(jwtService.generateRefreshToken(userToken)).thenReturn(newRefreshToken);
 
-        var res = service.refreshToken(accessToken, refreshToken);
+        var res = service.refreshToken(refreshToken);
 
         verify(tokenService).revokeAll(userId);
         verify(tokenService).create(userId, newToken, newRefreshToken);

@@ -53,6 +53,9 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserBO getCurrent() {
         var currentUserToken = (UserToken) SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (currentUserToken == null) {
+            return null;
+        }
         return conversionService.convert(repository.findByEmail(currentUserToken.getEmail()), UserBO.class);
     }
 

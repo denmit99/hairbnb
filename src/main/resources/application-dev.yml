@@ -1,0 +1,4 @@
+app:
+  jwt:
+    expiration: 1h
+    refresh-expiration: 7d

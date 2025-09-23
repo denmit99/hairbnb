@@ -3,16 +3,8 @@ package com.denmit99.hairbnb.service.impl;
 import com.denmit99.hairbnb.exception.NotFoundException;
 import com.denmit99.hairbnb.model.UserToken;
 import com.denmit99.hairbnb.model.bo.UserBO;
-import com.denmit99.hairbnb.model.bo.auth.LoginRequestBO;
-import com.denmit99.hairbnb.model.bo.auth.LoginResponseBO;
-import com.denmit99.hairbnb.model.bo.auth.RegisterRequestBO;
-import com.denmit99.hairbnb.model.bo.auth.RegisterResponseBO;
-import com.denmit99.hairbnb.model.bo.auth.UserCreateRequestBO;
-import com.denmit99.hairbnb.service.AuthenticationService;
-import com.denmit99.hairbnb.service.CustomPasswordEncoder;
-import com.denmit99.hairbnb.service.JwtService;
-import com.denmit99.hairbnb.service.TokenInfoService;
-import com.denmit99.hairbnb.service.UserService;
+import com.denmit99.hairbnb.model.bo.auth.*;
+import com.denmit99.hairbnb.service.*;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
@@ -65,15 +57,13 @@ public class AuthenticationServiceImpl implements AuthenticationService {
     }
 
     @Override
-    public LoginResponseBO refreshToken(String accessToken, String refreshToken) {
-        var token = tokenService.findByJWT(accessToken);
-        if (token == null || !jwtService.isValid(accessToken)) {
-            throw new NotFoundException("Invalid access token");
-        }
-        if (!token.getRefreshToken().equals(refreshToken) || !jwtService.isValid(refreshToken)) {
+    public LoginResponseBO refreshToken(String refreshToken) {
+        var token = tokenService.findByRefreshToken(refreshToken);
+        if (token == null || !jwtService.isValid(refreshToken)) {
             throw new AccessDeniedException("Invalid refresh token");
         }
-        var userBO = userService.getCurrent();
+        var email = jwtService.extractEmail(refreshToken);
+        var userBO = userService.findByEmail(email);
         return updateTokens(userBO);
     }
 

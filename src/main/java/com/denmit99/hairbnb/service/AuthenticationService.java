@@ -8,7 +8,7 @@ import com.denmit99.hairbnb.model.bo.auth.RegisterResponseBO;
 public interface AuthenticationService {
     RegisterResponseBO register(RegisterRequestBO requestBO);
 
-    LoginResponseBO refreshToken(String accessToken, String refreshToken);
+    LoginResponseBO refreshToken(String refreshToken);
 
     LoginResponseBO login(LoginRequestBO requestBO);
 

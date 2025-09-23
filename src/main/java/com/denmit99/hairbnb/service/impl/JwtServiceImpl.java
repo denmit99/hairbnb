@@ -7,12 +7,10 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.convert.ConversionService;
 import org.springframework.stereotype.Service;
 
 import java.security.Key;
-import java.time.Duration;
 import java.util.Date;
 import java.util.Map;
 import java.util.function.Function;
@@ -20,21 +18,13 @@ import java.util.function.Function;
 @Service
 public class JwtServiceImpl implements JwtService {
 
-    private final String secretKey;
-
-    private final Duration expiration;
-
-    private final Duration refreshExpiration;
+    private final JwtProperties jwtProperties;
 
     private final ConversionService conversionService;
 
-    public JwtServiceImpl(@Value("${app.jwt.secret}") String secretKey,
-                          @Value("${app.jwt.expiration}") Duration expiration,
-                          @Value("${app.jwt.refresh-expiration}") Duration refreshExpiration,
+    public JwtServiceImpl(JwtProperties jwtProperties,
                           ConversionService conversionService) {
-        this.secretKey = secretKey;
-        this.expiration = expiration;
-        this.refreshExpiration = refreshExpiration;
+        this.jwtProperties = jwtProperties;
         this.conversionService = conversionService;
     }
 
@@ -53,12 +43,12 @@ public class JwtServiceImpl implements JwtService {
 
     @Override
     public String generate(UserToken token) {
-        return buildToken(token, expiration.toMillis());
+        return buildToken(token, jwtProperties.getExpiration().toMillis());
     }
 
     @Override
     public String generateRefreshToken(UserToken token) {
-        return buildToken(token, refreshExpiration.toMillis());
+        return buildToken(token, jwtProperties.getRefreshExpiration().toMillis());
     }
 
     private String buildToken(UserToken token, long expirationPeriod) {
@@ -106,6 +96,6 @@ public class JwtServiceImpl implements JwtService {
     }
 
     private Key getSigningKey() {
-        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(secretKey));
+        return Keys.hmacShaKeyFor(Decoders.BASE64.decode(jwtProperties.getSecret()));
     }
 }
